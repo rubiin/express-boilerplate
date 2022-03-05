@@ -10,19 +10,24 @@ const UserSchema = new Schema(
     {
         fullName: {
             type: String,
-            required: false,
+            required: true,
             index: true,
             default: "",
         },
         password: {
             type: String,
             select: false,
-            required: false,
+            required: true,
             default: "",
         },
         phoneNumber: {
             type: String,
+            required: true,
+        },
+        isVerified: {
+            type: Boolean,
             required: false,
+            default: true,
         },
     },
     {

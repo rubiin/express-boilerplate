@@ -192,7 +192,7 @@ const responseMessages = {
 
     //Admin user crud
 
-    ADMIN_USER: "Admin user",
+    ADMIN_USER: "User",
     ADD_ADMIN_USER_SUCCESS_MESSAGE: "Admin user added successfully",
     ADD_ADMIN_USER__FAILURE_MESSAGE: "Error adding admin user",
     ADMIN_USER_FAILURE_MESSAGE: "Unauthorized",
@@ -442,11 +442,8 @@ const responseMessages = {
     HISTORY_DISMIS_FAIL: "Unable to dismis notification",
     HISTORY_DISMIS_SUCCESS: "Notification dismis success",
 
-    // User Notification
-    USER_NOTIFICATION: "User Notification",
-    USER_NOTIFICATION_SUCCESS: "User notification save success",
-    USER_NOTIFICATION_FAILED: "Unale to save user notification",
-    USER_NOTIFICATION_LIST: "user notification listed success",
+
+    USER_TITLE: "User",
 
     // onboard
     ONBOARD_TITLE: "Onboarding",
@@ -461,6 +458,7 @@ const responseMessages = {
 
     //Link Request
     USERS: "Users",
+    USER_EXISTS: "Users with phone number already exists",
     USER_FETCH_SUCCESS: "User fetched successfully.",
     USER_FETCH_FAILURE: "User fetched failure.",
 

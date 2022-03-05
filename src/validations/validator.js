@@ -34,7 +34,6 @@ export const validateRequestBody = (schema, title, opt) => (req, res, next) => {
             message:"Required fields missing or invalid",
             details:formattedMessage
         });
-        //return respondError(res, 422, title, errors);
     }
 
     if (!req.value) {

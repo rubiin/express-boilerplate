@@ -9,6 +9,6 @@ const Joi = JoiBase.extend(JoiDate);
 
 export const createUserSchema = Joi.object().keys({
     phoneNumber: Joi.string().required(),
-    fulName: Joi.string().required(),
+    fullName: Joi.string().required(),
     password: Joi.string().required()
 });
