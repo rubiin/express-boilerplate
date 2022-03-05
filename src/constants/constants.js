@@ -34,20 +34,19 @@ const responseMessages = {
 		FORGOT_PASSWORD_SUCCESS_MESSAGE:
 			'Password reset link sent successfully. Please check your inbox.',
 		FORGOT_PASSWORD_FAILURE_MESSAGE: 'Forgot password failed',
-		
+
 		RESET_PASSWORD_TITLE: 'Reset password',
 		RESET_PASSWORD_SUCCESS_MESSAGE: 'Password changed successfully.',
 		RESET_PASSWORD_FAILURE_MESSAGE: 'Forgot password failed',
 		TOKEN_EXPIRED_MESSAGE: 'Token expired',
 		CHANGE_PASSWORD: 'Change password',
 		PASSWORD_NOT_MATCH: 'Old password does not match',
-		
+
 		LOGOUT_TITLE: 'Logout',
 		LOGOUT_FAILURE_MESSAGE: 'Could not log out. Please try again later',
 		LOGOUT_SUCCESS_MESSAGE: 'Logged out successfully',
 		DEVICE_NOT_FOUND: 'Device not found',
 
-		
 		// token
 		TOKEN_TITLE: 'Token',
 		TOKEN_NOT_FOUND: 'Token not found on request.',

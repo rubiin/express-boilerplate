@@ -32,13 +32,12 @@ export const saveUser = async (req, res, next) => {
 					user: result._id,
 				};
 				await sendOtpVerification(data);
-				result = omit(result, ['password']);
 				return respondSuccess(
 					res,
 					StatusCodes.OK,
 					Lang.USER_TITLE,
 					Lang.SUCCESS,
-					result,
+					data,
 				);
 			})
 			.catch(err => {

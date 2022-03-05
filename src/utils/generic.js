@@ -38,4 +38,3 @@ export const sendOtpVerification = async data => {
 	});
 	return otp.save();
 };
-

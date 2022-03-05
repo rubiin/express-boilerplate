@@ -6,17 +6,26 @@ import usersRouter from './routes/users';
 import verifyRoute from './routes/verify';
 import connectDb from './utils/database';
 import createError from 'http-errors';
+import bodyParser from 'body-parser';
+import multer from 'multer';
 
 const app = express();
 
 connectDb();
 
+// middlewares setup
 app.use(logger('dev'));
-app.use(express.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(helmet());
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
+app.use(
+	bodyParser.urlencoded({
+		extended: true,
+	}),
+);
+app.use(express.static(`${__dirname}/uploads`));
 
+// routes setup
 app.use('/user', usersRouter);
 app.use('/verify', verifyRoute);
 
@@ -25,14 +34,16 @@ app.use((req, res, next) => {
 	next(createError(404));
 });
 
+// all error handler
 app.use((err, req, res, next) => {
-	// res.status(err.status || 500);
-	// console.log('from server',err.message)
-	// return res.json({
-	//   title: err.title || 'Internal server error',
-	//   message: err.message,
-	//   data: [],
-	// });
+	if (err instanceof multer.MulterError) {
+		if (err.code === 'LIMIT_FILE_SIZE') {
+			res.status(413);
+			return res.json({
+				message: 'Filesize too large, must be < 5MB',
+			});
+		}
+	}
 
 	let statusCode = 0;
 	if (err.status) statusCode = err.status;
