@@ -1,10 +1,16 @@
 import express from 'express';
-import { fetchUsersList, saveUser } from '../controllers/userController';
+import {
+	fetchUsersList,
+	loginUser,
+	saveUser,
+} from '../controllers/userController';
 import { validateRequestBody } from '../validations/validator';
 import { createUserSchema } from '../validations/schemas/user';
+import {authenticateToken} from "../utils/jwt";
 const router = express.Router();
 
 router.post('/', validateRequestBody(createUserSchema), saveUser);
-router.get('/', fetchUsersList);
+router.post('/login', loginUser);
+router.get('/',authenticateToken, fetchUsersList);
 
 export default router;

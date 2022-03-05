@@ -4,6 +4,7 @@ import {
 	getVerificationCodeDetails,
 	verifyDevice,
 } from '../repositories/verifyRepository';
+import { StatusCodes } from 'http-status-codes';
 
 export const verifyForSignup = async (req, res) => {
 	try {
@@ -16,14 +17,13 @@ export const verifyForSignup = async (req, res) => {
 		if (!codeDetails) {
 			return respondError(
 				res,
-				500,
+				StatusCodes.BAD_REQUEST,
 				'Verification',
 				'Device cannot be verified successfully at the moment. Please try sending the device verification code and try again',
 			);
 		}
 
 		const isExpired = isAfter(new Date(), new Date(codeDetails.expiryDate));
-		console.log(isExpired);
 		if (isExpired) {
 			return respondError(
 				res,

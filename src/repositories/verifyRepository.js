@@ -3,7 +3,6 @@ import { convertStringIdToObjectId } from '../utils/generic';
 import UserModel from '../models/userModel';
 
 export const getVerificationCodeDetails = async (otp, phoneNumber) => {
-	console.log(otp, phoneNumber);
 	try {
 		let details = await OtpModel.findOne({
 			verificationCode: otp,
