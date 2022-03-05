@@ -18,7 +18,7 @@ const OtpSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		isExpired: {
+		isUsed: {
 			type: Boolean,
 			default: false,
 		},

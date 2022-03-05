@@ -3,6 +3,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import usersRouter from './routes/users';
+import verifyRoute from './routes/verify';
 import connectDb from './utils/database';
 import createError from 'http-errors';
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/user', usersRouter);
+app.use('/verify', verifyRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
