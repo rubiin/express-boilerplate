@@ -3,10 +3,11 @@ import {
 	fetchUsersList,
 	loginUser,
 	saveUser,
-} from '../controllers/userController';
-import { validateRequestBody } from '../validations/validator';
-import { createUserSchema } from '../validations/schemas/user';
-import { authenticateToken } from '../utils/jwt';
+} from '../../controllers/userController';
+import { validateRequestBody } from '../../validations/validator';
+import createUserSchema from '../../validations/schemas/user';
+import { authenticateToken } from '../../utils/jwt';
+
 const router = express.Router();
 
 router.post('/', validateRequestBody(createUserSchema), saveUser);

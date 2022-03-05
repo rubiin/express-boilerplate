@@ -2,12 +2,11 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
-import usersRouter from './routes/users';
-import verifyRoute from './routes/verify';
-import connectDb from './utils/database';
 import createError from 'http-errors';
 import bodyParser from 'body-parser';
 import multer from 'multer';
+import connectDb from './utils/database';
+import routes from './routes/v1';
 
 const app = express();
 
@@ -25,9 +24,8 @@ app.use(
 );
 app.use(express.static(`${__dirname}/uploads`));
 
-// routes setup
-app.use('/user', usersRouter);
-app.use('/verify', verifyRoute);
+// v1 api routes
+app.use('/v1', routes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -35,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 // all error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
 	if (err instanceof multer.MulterError) {
 		if (err.code === 'LIMIT_FILE_SIZE') {
 			res.status(413);

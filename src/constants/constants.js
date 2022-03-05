@@ -61,9 +61,10 @@ const responseMessages = {
 
 const lang = process.env.SYSTEM_LANGUAGE || 'EN';
 
+// eslint-disable-next-line import/no-mutable-exports
 let Lang;
 
-if (lang == 'EN') {
+if (lang === 'EN') {
 	Lang = responseMessages.EN;
 }
 

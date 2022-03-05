@@ -1,11 +1,11 @@
-import { respondError, respondSuccess } from '../utils/responseHelper';
-import { createUser, getUserByCondition } from '../repositories/userRepository';
-import Lang from '../constants/constants';
 import { StatusCodes } from 'http-status-codes';
+import { respondError, respondSuccess } from '../utils/responseHelper';
+import Lang from '../constants/constants';
 import { sendOtpVerification } from '../utils/generic';
 import { createHost } from '../repositories/hostRepository';
 import { createEvent } from '../repositories/eventRepository';
 
+// eslint-disable-next-line import/prefer-default-export
 export const saveEvent = async (req, res, next) => {
 	try {
 		const data = req.body;
@@ -13,11 +13,11 @@ export const saveEvent = async (req, res, next) => {
 		data.hostId = host._id;
 		return createEvent(data)
 			.then(async result => {
-				const data = {
+				const payload = {
 					phoneNumber: result.phoneNumber,
 					user: result._id,
 				};
-				await sendOtpVerification(data);
+				await sendOtpVerification(payload);
 				return respondSuccess(
 					res,
 					StatusCodes.OK,

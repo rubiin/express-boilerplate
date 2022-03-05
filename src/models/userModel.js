@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import mongooseDelete from 'mongoose-delete';
-let mongooseAggregatePaginate = require('mongoose-aggregate-paginate-v2');
+
+const mongooseAggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const saltRounds = 10;
 const { Schema } = mongoose;
@@ -41,7 +42,7 @@ UserSchema.pre('save', function (next) {
 		return next();
 	}
 
-	if (this.password != undefined) {
+	if (this.password !== undefined) {
 		this.password = bcrypt.hashSync(this.password, saltRounds);
 	}
 
@@ -49,7 +50,7 @@ UserSchema.pre('save', function (next) {
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
-	return await bcrypt.compare(candidatePassword, this.password);
+	return bcrypt.compare(candidatePassword, this.password);
 };
 
 UserSchema.pre('updateOne', function (next) {

@@ -31,16 +31,19 @@ export const getEventList = async (
 			$facet: {
 				pagination: [
 					{ $count: 'total' },
-					{ $addFields: { page: parseInt(options.page) } },
+					{ $addFields: { page: parseInt(options.page, 10) } },
 				],
 				docs: [
 					{
 						$skip:
-							(parseInt(options.page) - 1) *
-							parseInt(options.limit ? options.limit : 10),
+							(parseInt(options.page, 10) - 1) *
+							parseInt(options.limit ? options.limit : 10, 10),
 					},
 					{
-						$limit: parseInt(options.limit ? options.limit : 10),
+						$limit: parseInt(
+							options.limit ? options.limit : 10,
+							10,
+						),
 					},
 				],
 			},
@@ -53,7 +56,7 @@ export const getEventList = async (
 			? data[0].pagination[0]
 			: {
 					total: 0,
-					page: parseInt(options.page),
+					page: parseInt(options.page, 10),
 			  };
 	return {
 		pagination,
@@ -62,5 +65,5 @@ export const getEventList = async (
 };
 
 export const getEventByCondition = async condition => {
-	return await EventModel.findOne(condition).exec();
+	return EventModel.findOne(condition).exec();
 };

@@ -1,5 +1,5 @@
-import HostModel from '../models/hostModel';
 import { pick } from '@rubiin/js-utils';
+import HostModel from '../models/hostModel';
 
 // create Host
 export const createHost = async data => {
@@ -9,5 +9,5 @@ export const createHost = async data => {
 };
 
 export const getHostByCondition = async condition => {
-	return await HostModel.findOne(condition).exec();
+	return HostModel.findOne(condition).exec();
 };

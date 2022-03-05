@@ -5,8 +5,8 @@ const storage = multer.diskStorage({
 	destination(req, file, cb) {
 		cb(null, './uploads/');
 	},
-	fileFilter: function (req, file, callback) {
-		let ext = path.extname(file.originalname);
+	fileFilter(req, file, callback) {
+		const ext = path.extname(file.originalname);
 		if (
 			ext !== '.png' &&
 			ext !== '.jpg' &&
@@ -25,4 +25,5 @@ const storage = multer.diskStorage({
 		cb(null, filename);
 	},
 });
-export const upload = multer();
+const upload = multer({ storage });
+export default upload;

@@ -3,7 +3,7 @@ import JoiDate from '@hapi/joi-date';
 
 const Joi = JoiBase.extend(JoiDate);
 
-export const eventCreateSchema = Joi.object().keys({
+const eventCreateSchema = Joi.object().keys({
 	title: Joi.string().required().min(3).max(50).label('Title'),
 	description: Joi.string().required().min(3).max(50).label('Description'),
 	dateTime: Joi.string().required().min(3).max(50).label('DateTime'),
@@ -15,3 +15,5 @@ export const eventCreateSchema = Joi.object().keys({
 		.max(50)
 		.label('EventCategory'),
 });
+
+export default eventCreateSchema;

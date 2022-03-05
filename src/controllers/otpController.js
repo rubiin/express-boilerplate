@@ -1,16 +1,17 @@
-import { respondError, respondSuccess } from '../utils/responseHelper';
+import { StatusCodes } from 'http-status-codes';
 import { isAfter } from 'date-fns';
+import { respondError, respondSuccess } from '../utils/responseHelper';
 import {
 	getVerificationCodeDetails,
 	verifyDevice,
 } from '../repositories/verifyRepository';
-import { StatusCodes } from 'http-status-codes';
 
+// eslint-disable-next-line import/prefer-default-export
 export const verifyForSignup = async (req, res) => {
 	try {
 		const { otpCode, phoneNumber } = req.body;
 
-		let codeDetails = await getVerificationCodeDetails(
+		const codeDetails = await getVerificationCodeDetails(
 			otpCode,
 			phoneNumber,
 		);

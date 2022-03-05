@@ -24,16 +24,19 @@ export const getUserList = async (
 			$facet: {
 				pagination: [
 					{ $count: 'total' },
-					{ $addFields: { page: parseInt(options.page) } },
+					{ $addFields: { page: parseInt(options.page, 10) } },
 				],
 				docs: [
 					{
 						$skip:
-							(parseInt(options.page) - 1) *
-							parseInt(options.limit ? options.limit : 10),
+							(parseInt(options.page, 10) - 1) *
+							parseInt(options.limit ? options.limit : 10, 10),
 					},
 					{
-						$limit: parseInt(options.limit ? options.limit : 10),
+						$limit: parseInt(
+							options.limit ? options.limit : 10,
+							10,
+						),
 					},
 				],
 			},
@@ -46,7 +49,7 @@ export const getUserList = async (
 			? data[0].pagination[0]
 			: {
 					total: 0,
-					page: parseInt(options.page),
+					page: parseInt(options.page, 10),
 			  };
 	return {
 		pagination,
@@ -55,5 +58,5 @@ export const getUserList = async (
 };
 
 export const getUserByCondition = async condition => {
-	return await UserModel.findOne(condition).exec();
+	return UserModel.findOne(condition).exec();
 };

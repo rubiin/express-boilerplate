@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import {
 	createUser,
 	getUserByCondition,
@@ -5,10 +6,8 @@ import {
 } from '../repositories/userRepository';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
-import { StatusCodes } from 'http-status-codes';
-import { comparePassword, sendOtpVerification } from '../utils/generic';
+import { sendOtpVerification } from '../utils/generic';
 import { generateJWTToken } from '../utils/jwt';
-import { omit } from '@rubiin/js-utils';
 
 export const saveUser = async (req, res, next) => {
 	try {
@@ -27,11 +26,11 @@ export const saveUser = async (req, res, next) => {
 
 		return await createUser(data)
 			.then(async result => {
-				const data = {
+				const payload = {
 					phoneNumber: result.phoneNumber,
 					user: result._id,
 				};
-				await sendOtpVerification(data);
+				await sendOtpVerification(payload);
 				return respondSuccess(
 					res,
 					StatusCodes.OK,
@@ -58,7 +57,7 @@ export const saveUser = async (req, res, next) => {
 // get user list
 export const fetchUsersList = async (req, res, next) => {
 	try {
-		let options = req.query;
+		const options = req.query;
 
 		return await getUserList(options)
 			.then(result => {
@@ -89,7 +88,7 @@ export const loginUser = async (req, res, next) => {
 	try {
 		const { phoneNumber, password } = req.body;
 
-		let userExists = await getUserByCondition({
+		const userExists = await getUserByCondition({
 			phoneNumber,
 		});
 
@@ -100,7 +99,7 @@ export const loginUser = async (req, res, next) => {
 			return next(err);
 		}
 
-		let isMatchPassword = await userExists.comparePassword(password);
+		const isMatchPassword = await userExists.comparePassword(password);
 
 		if (!isMatchPassword) {
 			const err = new Error(Lang.CREDENTIAL_FAILED);

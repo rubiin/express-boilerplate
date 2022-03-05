@@ -1,13 +1,17 @@
-import { respondError, respondValidationError } from '../utils/responseHelper';
+import {
+	respondApiError,
+	respondError,
+	respondValidationError,
+} from '../utils/responseHelper';
 
 const buildUsefulErrorObject = errors => {
 	let errorMessage = '';
-	errors.map((error, i) => {
+	errors.forEach((error, i) => {
 		// replace white space and slashes
 		if (errors.length === i + 1) {
 			errorMessage += `${error.message.replace(/['"]/g, '')}`;
 		} else {
-			errorMessage += `${error.message.replace(/['"]/g, '')}` + '\n';
+			errorMessage += `${error.message.replace(/['"]/g, '')}\n`;
 		}
 	});
 
@@ -20,10 +24,6 @@ export const validateRequestBody = (schema, title, opt) => (req, res, next) => {
 	};
 	const validation = schema.validate(req.body, options);
 	if (validation.error) {
-		const errors = validation.error
-			? buildUsefulErrorObject(validation.error.details)
-			: null;
-
 		const formattedMessage = validation.error.details.map(item => {
 			return {
 				[item.context.label]: item.message.replace(/['"]/g, ''),
@@ -49,12 +49,6 @@ export const validateApiRequestBodyNew = (schema, opt) => (req, res, next) => {
 	};
 	const validation = schema.validate(req.body, options);
 	if (validation.error) {
-		console.log('validation.error', validation.error.details);
-
-		const errors = validation.error
-			? buildUsefulErrorObject(validation.error.details)
-			: null;
-
 		const formattedMessage = validation.error.details.map(item => {
 			return {
 				[item.context.label]: item.message.replace(/['"]/g, ''),

@@ -4,7 +4,7 @@ import UserModel from '../models/userModel';
 
 export const getVerificationCodeDetails = async (otp, phoneNumber) => {
 	try {
-		let details = await OtpModel.findOne({
+		const details = await OtpModel.findOne({
 			verificationCode: otp,
 			phoneNumber,
 			isUsed: false,
