@@ -1,9 +1,10 @@
 import express from 'express'
+import {createNewUser} from "../controllers/userController";
+import {validateRequestBody} from "../validations/validator";
+import {createUserSchema} from "../validations/schemas/user";
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, _next) {
-  res.send('respond with a resources');
-});
+
+router.post('/',   validateRequestBody(createUserSchema),createNewUser)
 
 export default router;
