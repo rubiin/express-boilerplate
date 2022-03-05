@@ -77,12 +77,9 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+# dotenv environment variables file
+env/*
+!env/.env.sample
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -143,4 +140,3 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
-n
