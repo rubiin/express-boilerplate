@@ -3,9 +3,8 @@ import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
 import { sendOtpVerification } from '../utils/generic';
 import { createHost } from '../repositories/hostRepository';
-import { createEvent } from '../repositories/eventRepository';
+import { createEvent, getEventList } from '../repositories/eventRepository';
 
-// eslint-disable-next-line import/prefer-default-export
 export const saveEvent = async (req, res, next) => {
 	try {
 		const data = req.body;
@@ -24,6 +23,36 @@ export const saveEvent = async (req, res, next) => {
 					Lang.USER_TITLE,
 					Lang.SUCCESS,
 					data,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log('error', error);
+		next(error);
+	}
+};
+
+// get event list
+export const fetchEventList = async (req, res, next) => {
+	try {
+		const options = req.query;
+
+		return await getEventList(options)
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.EVENT_TITLE,
+					Lang.SUCCESS,
+					result,
 				);
 			})
 			.catch(err => {

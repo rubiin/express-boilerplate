@@ -14,15 +14,35 @@ const UserSchema = new Schema(
 			required: true,
 			index: true,
 		},
+		profilePic: {
+			type: String,
+			required: false,
+			default: '',
+		},
 		password: {
 			type: String,
 			required: true,
+		},
+		email: {
+			type: String,
+			required: false,
+			default: '',
+		},
+		address: {
+			type: String,
+			required: false,
+			default: '',
 		},
 		phoneNumber: {
 			type: String,
 			required: true,
 		},
 		isVerified: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		isRegistrationComplete: {
 			type: Boolean,
 			required: false,
 			default: false,

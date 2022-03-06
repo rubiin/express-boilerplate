@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import {
-	createUser,
+	createUserProfile,
 	getUserByCondition,
 	getUserList,
+	updateUserProfile,
 } from '../repositories/userRepository';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
@@ -24,7 +25,7 @@ export const saveUser = async (req, res, next) => {
 			return next(err);
 		}
 
-		return await createUser(data)
+		return await createUserProfile(data)
 			.then(async result => {
 				const payload = {
 					phoneNumber: result.phoneNumber,
@@ -112,6 +113,7 @@ export const loginUser = async (req, res, next) => {
 		const user = {
 			user: userExists._id,
 			phoneNumber: userExists.phoneNumber,
+			isRegistrationComplete: userExists.isRegistrationComplete,
 		};
 		return respondSuccess(
 			res,
@@ -127,6 +129,50 @@ export const loginUser = async (req, res, next) => {
 				},
 			},
 		);
+	} catch (error) {
+		console.log(error);
+		return respondError(
+			res,
+			StatusCodes.INTERNAL_SERVER_ERROR,
+			Lang.LOGIN_TITLE,
+			error.message,
+		);
+	}
+};
+
+export const updateUser = async (req, res, next) => {
+	try {
+		if (!req.file) {
+			const err = new Error(Lang.IMAGE_REQUIRED);
+			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+			err.title = Lang.USER_TITLE;
+			return next(err);
+		}
+
+		const data = {
+			...req.body,
+			profilePic: req.file.filename,
+		};
+
+		return updateUserProfile(data, req.user._id)
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.USER_TITLE,
+					Lang.SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
 	} catch (error) {
 		console.log(error);
 		return respondError(

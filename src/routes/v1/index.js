@@ -1,17 +1,22 @@
 import express from 'express';
-import userRouter from './users';
-import verifyRoute from './verify';
+import userRouter from './usersRoute';
+import verifyRoute from './verifyRoute';
+import eventRoute from './eventRoute';
 
 const router = express.Router();
 
 const routes = [
 	{
 		path: '/user',
-		route: userRouter(),
+		route: userRouter,
 	},
 	{
 		path: '/verify',
-		route: verifyRoute(),
+		route: verifyRoute,
+	},
+	{
+		path: '/event',
+		route: eventRoute,
 	},
 ];
 

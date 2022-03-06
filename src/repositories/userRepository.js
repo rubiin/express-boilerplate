@@ -1,9 +1,21 @@
 import UserModel from '../models/userModel';
+import { convertStringIdToObjectId } from '../utils/generic';
 
-// create user profile
-export const createUser = async data => {
-	const admin = new UserModel(data);
-	return admin.save();
+export const createUserProfile = async data => {
+	const user = new UserModel(data);
+	return user.save();
+};
+
+export const updateUserProfile = async (data, id) => {
+	return UserModel.findByIdAndUpdate(
+		{
+			_id: convertStringIdToObjectId(id),
+		},
+		{
+			$set: data,
+		},
+		{ useFindAndModify: false, new: true },
+	);
 };
 
 export const getUserList = async (
