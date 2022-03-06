@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+	fetchUserProfile,
 	fetchUsersList,
 	loginUser,
 	saveUser,
@@ -24,6 +25,7 @@ router.put(
 	updateUser,
 );
 router.post('/login', loginUser);
+router.get('/profile', authenticateToken, fetchUserProfile);
 router.get('/', authenticateToken, fetchUsersList);
 
 export default router;

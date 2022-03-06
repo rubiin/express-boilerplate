@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const EventSchema = new Schema(
 	{
-		hostId: {
+		host: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Host',
 			required: true,
@@ -22,10 +22,6 @@ const EventSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		address: {
-			type: String,
-			required: true,
-		},
 		eventType: {
 			type: String,
 			required: true,
@@ -39,8 +35,20 @@ const EventSchema = new Schema(
 			ref: 'Location',
 			required: true,
 		},
-		dateTime: {
+		startDateTime: {
 			type: Date,
+			required: false,
+			default: Date.now,
+		},
+		endDateTime: {
+			type: Date,
+			required: false,
+			default: null,
+		},
+		eventLink: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 	{ timestamps: true },

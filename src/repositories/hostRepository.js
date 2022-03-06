@@ -11,3 +11,7 @@ export const createHost = async data => {
 export const getHostByCondition = async condition => {
 	return HostModel.findOne(condition).exec();
 };
+
+export const getHosttById = async id => {
+	return HostModel.findById(id).lean().exec();
+};

@@ -4,10 +4,14 @@ import EventModel from '../models/eventModel';
 export const createEvent = async data => {
 	const event = new EventModel();
 	event.title = data.title;
+	event.host = data.host;
+	event.location = data.location;
+	event.eventLink = data.eventLink;
+	event.startDateTime = data.startDateTime;
+	event.endDateTime = data.endDateTime;
 	event.description = data.description;
 	event.coverImage = data.coverImage;
 	event.dateTime = data.dateTime;
-	event.address = data.address;
 	event.eventCategory = data.eventCategory;
 	event.eventType = data.eventType;
 	return event.save();
@@ -66,4 +70,7 @@ export const getEventList = async (
 
 export const getEventByCondition = async condition => {
 	return EventModel.findOne(condition).exec();
+};
+export const getEventById = async id => {
+	return EventModel.findById(id).lean().exec();
 };

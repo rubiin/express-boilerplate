@@ -1,16 +1,40 @@
 import { StatusCodes } from 'http-status-codes';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
-import { sendOtpVerification } from '../utils/generic';
+import {
+	convertStringIdToObjectId,
+	sendOtpVerification,
+} from '../utils/generic';
 import { createHost } from '../repositories/hostRepository';
-import { createEvent, getEventList } from '../repositories/eventRepository';
+import {
+	createEvent,
+	getEventById,
+	getEventList,
+} from '../repositories/eventRepository';
+import { getUserByCondition } from '../repositories/userRepository';
+import { createLocation } from '../repositories/locationRepository';
 
 export const saveEvent = async (req, res, next) => {
 	try {
 		const data = req.body;
-		const host = await createHost(data);
-		data.hostId = host._id;
-		return createEvent(data)
+		const currentUser = await getUserByCondition({
+			_id: convertStringIdToObjectId(req.user._id),
+		});
+
+		const locationPayload = {
+			city: data.location.city,
+			state: data.location.state,
+			zipCode: data.location.zipCode,
+			latitude: data.location.latitude,
+			longitude: data.location.longitude,
+		};
+		const [host, location] = await Promise.all([
+			createHost(currentUser),
+			createLocation(locationPayload),
+		]);
+		data.host = host._id;
+		data.location = location._id;
+		createEvent(data)
 			.then(async result => {
 				const payload = {
 					phoneNumber: result.phoneNumber,
@@ -40,12 +64,40 @@ export const saveEvent = async (req, res, next) => {
 	}
 };
 
-// get event list
 export const fetchEventList = async (req, res, next) => {
 	try {
 		const options = req.query;
 
-		return await getEventList(options)
+		getEventList(options)
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.EVENT_TITLE,
+					Lang.SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log('error', error);
+		next(error);
+	}
+};
+
+export const fetchEventById = async (req, res, next) => {
+	try {
+		const eventId = req.params.id;
+
+		getEventById(convertStringIdToObjectId(eventId))
 			.then(result => {
 				return respondSuccess(
 					res,

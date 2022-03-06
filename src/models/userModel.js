@@ -17,7 +17,7 @@ const UserSchema = new Schema(
 		profilePic: {
 			type: String,
 			required: false,
-			default: '',
+			default: null,
 		},
 		password: {
 			type: String,
@@ -26,12 +26,12 @@ const UserSchema = new Schema(
 		email: {
 			type: String,
 			required: false,
-			default: '',
+			default: null,
 		},
 		address: {
 			type: String,
 			required: false,
-			default: '',
+			default: null,
 		},
 		phoneNumber: {
 			type: String,

@@ -1,13 +1,18 @@
 import { StatusCodes } from 'http-status-codes';
+import { omit } from '@rubiin/js-utils';
 import {
 	createUserProfile,
 	getUserByCondition,
+	getUserById,
 	getUserList,
 	updateUserProfile,
 } from '../repositories/userRepository';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
-import { sendOtpVerification } from '../utils/generic';
+import {
+	convertStringIdToObjectId,
+	sendOtpVerification,
+} from '../utils/generic';
 import { generateJWTToken } from '../utils/jwt';
 
 export const saveUser = async (req, res, next) => {
@@ -25,7 +30,7 @@ export const saveUser = async (req, res, next) => {
 			return next(err);
 		}
 
-		return await createUserProfile(data)
+		createUserProfile(data)
 			.then(async result => {
 				const payload = {
 					phoneNumber: result.phoneNumber,
@@ -60,7 +65,7 @@ export const fetchUsersList = async (req, res, next) => {
 	try {
 		const options = req.query;
 
-		return await getUserList(options)
+		getUserList(options)
 			.then(result => {
 				return respondSuccess(
 					res,
@@ -152,9 +157,10 @@ export const updateUser = async (req, res, next) => {
 		const data = {
 			...req.body,
 			profilePic: req.file.filename,
+			isRegistrationComplete: true,
 		};
 
-		return updateUserProfile(data, req.user._id)
+		updateUserProfile(data, req.user._id)
 			.then(result => {
 				return respondSuccess(
 					res,
@@ -181,5 +187,33 @@ export const updateUser = async (req, res, next) => {
 			Lang.LOGIN_TITLE,
 			error.message,
 		);
+	}
+};
+
+export const fetchUserProfile = async (req, res, next) => {
+	try {
+		getUserById(convertStringIdToObjectId(req.user._id))
+			.then(result => {
+				result = omit(result, ['password']);
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.USER_TITLE,
+					Lang.SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log('error', error);
+		next(error);
 	}
 };
