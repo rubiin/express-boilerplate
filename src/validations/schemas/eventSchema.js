@@ -23,6 +23,13 @@ const eventCreateSchema = Joi.object().keys({
 		.min(3)
 		.max(50)
 		.label('EventCategory'),
+	location: Joi.object({
+		latitude: Joi.string().required(),
+		longitude: Joi.string().required(),
+		city: Joi.string().optional().allow('').allow(null),
+		state: Joi.string().optional().allow('').allow(null),
+		zipCode: Joi.string().optional().allow('').allow(null),
+	}).required(),
 });
 
 export default eventCreateSchema;
