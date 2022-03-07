@@ -21,16 +21,9 @@ export const saveEvent = async (req, res, next) => {
 			_id: convertStringIdToObjectId(req.user._id),
 		});
 
-		const locationPayload = {
-			city: data.location.city,
-			state: data.location.state,
-			zipCode: data.location.zipCode,
-			latitude: data.location.latitude,
-			longitude: data.location.longitude,
-		};
 		const [host, location] = await Promise.all([
 			createHost(currentUser),
-			createLocation(locationPayload),
+			createLocation(data.location),
 		]);
 		data.host = host._id;
 		data.location = location._id;

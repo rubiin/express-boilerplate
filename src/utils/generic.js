@@ -29,9 +29,12 @@ export const sendOtp = (content, phone) => {
 		});
 };
 
-export const sendOtpVerification = async data => {
+export const sendOtpVerification = async ({ data, type }) => {
 	const otpNumber = Math.floor(Math.random() * 1000000); // six digit otp
-	const content = `Your OTP verification code is ${otpNumber}`;
+	let content = `Your OTP verification code is ${otpNumber}`;
+	if (type === 'FORGOT_PASSWORD') {
+		content = `Your OTP code for password reset is ${otpNumber}`;
+	}
 	await sendOtp(content, data.phoneNumber);
 
 	const otp = new OtpModel({

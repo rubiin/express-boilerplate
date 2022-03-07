@@ -36,7 +36,7 @@ export const saveUser = async (req, res, next) => {
 					phoneNumber: result.phoneNumber,
 					user: result._id,
 				};
-				await sendOtpVerification(payload);
+				await sendOtpVerification({ data: payload, type: 'SIGNUP' });
 				return respondSuccess(
 					res,
 					StatusCodes.OK,
@@ -216,4 +216,29 @@ export const fetchUserProfile = async (req, res, next) => {
 		console.log('error', error);
 		next(error);
 	}
+};
+
+export const forgotPassword = async (req, res, next) => {
+	const { phoneNumber } = req.body;
+	const userExists = await getUserByCondition({ phoneNumber });
+	if (!userExists) {
+		const err = new Error(Lang.USER_NOT_FOUND);
+		err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+		err.title = Lang.FORGOT_PASSWORD_TITLE;
+		return next(err);
+	}
+	const payload = {
+		phoneNumber: userExists.phoneNumber,
+		user: userExists._id,
+	};
+	sendOtpVerification({ data: payload, type: 'FORGOT_PASSWORD' })
+		.then(_result => {
+			return respondSuccess(
+				res,
+				StatusCodes.OK,
+				Lang.FORGOT_PASSWORD_TITLE,
+				Lang.FORGOT_PASSWORD_SUCCESS_MESSAGE,
+			);
+		})
+		.catch(e => next(e));
 };

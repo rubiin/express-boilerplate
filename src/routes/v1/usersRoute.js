@@ -2,6 +2,7 @@ import express from 'express';
 import {
 	fetchUserProfile,
 	fetchUsersList,
+	forgotPassword,
 	loginUser,
 	saveUser,
 	updateUser,
@@ -25,6 +26,8 @@ router.put(
 	updateUser,
 );
 router.post('/login', loginUser);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', loginUser);
 router.get('/profile', authenticateToken, fetchUserProfile);
 router.get('/', authenticateToken, fetchUsersList);
 

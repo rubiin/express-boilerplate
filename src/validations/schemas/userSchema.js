@@ -25,4 +25,6 @@ export const updateUserSchema = Joi.object().keys({
 		.email({ tlds: { allow: false } })
 		.label('Email'),
 	address: Joi.string().required().max(50).label('Address'),
+	phoneNumber: Joi.string().optional().label('Phone Number'),
+	fullName: Joi.string().optional().min(5).max(50).label('Full Name'),
 });

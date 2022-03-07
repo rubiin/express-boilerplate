@@ -6,5 +6,10 @@ import { verifyForSignup } from '../../controllers/otpController';
 const router = express.Router();
 
 router.post('/signup', validateRequestBody(otpVerifySchema), verifyForSignup);
+router.post(
+	'/forgot-password',
+	validateRequestBody(otpVerifySchema),
+	verifyForSignup,
+);
 
 export default router;
