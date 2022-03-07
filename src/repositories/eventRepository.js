@@ -32,6 +32,34 @@ export const getEventList = async (
 			},
 		},
 		{
+			$lookup: {
+				from: 'hosts',
+				localField: 'host',
+				foreignField: '_id',
+				as: 'host',
+			},
+		},
+		{
+			$unwind: {
+				path: '$host',
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
+			$lookup: {
+				from: 'locations',
+				localField: 'location',
+				foreignField: '_id',
+				as: 'location',
+			},
+		},
+		{
+			$unwind: {
+				path: '$location',
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
 			$facet: {
 				pagination: [
 					{ $count: 'total' },
