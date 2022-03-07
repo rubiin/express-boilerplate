@@ -5,6 +5,7 @@ import {
 	getVerificationCodeDetails,
 	verifyDevice,
 } from '../repositories/verifyRepository';
+import Lang from '../constants/constants';
 
 const verifyOtp = async (req, res) => {
 	try {
@@ -18,8 +19,8 @@ const verifyOtp = async (req, res) => {
 			return respondError(
 				res,
 				StatusCodes.BAD_REQUEST,
-				'Verification',
-				'Device cannot be verified successfully at the moment. Please try sending the device verification code and try again',
+				Lang.OTP_VERIFICATION_TITLE,
+				Lang.OTP_VERIFICATION_ERROR,
 			);
 		}
 
@@ -28,8 +29,8 @@ const verifyOtp = async (req, res) => {
 			return respondError(
 				res,
 				500,
-				'Verification',
-				'Otp expured. Please try sending the device verification code and try again',
+				Lang.OTP_VERIFICATION_TITLE,
+				Lang.OTP_EXPIRED_MESSAGE,
 			);
 		}
 

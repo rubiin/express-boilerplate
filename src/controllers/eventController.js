@@ -46,8 +46,8 @@ export const saveEvent = async (req, res, next) => {
 				return respondSuccess(
 					res,
 					StatusCodes.OK,
-					Lang.USER_TITLE,
-					Lang.SUCCESS,
+					Lang.EVENT_TITLE,
+					Lang.EVENT_CREATE_SUCCESS,
 					result,
 				);
 			})
@@ -76,7 +76,7 @@ export const fetchEventList = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.EVENT_TITLE,
-					Lang.SUCCESS,
+					Lang.EVENT_FETCH_SUCCESS,
 					result,
 				);
 			})
@@ -105,7 +105,7 @@ export const fetchEventById = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.EVENT_TITLE,
-					Lang.SUCCESS,
+					Lang.EVENT_FETCH_SUCCESS,
 					result,
 				);
 			})

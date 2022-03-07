@@ -28,7 +28,7 @@ export const updateUserSchema = Joi.object().keys({
 	fullName: Joi.string().optional().min(5).max(50),
 });
 
-export const forgotPasswordSchema = Joi.object().keys({
+export const sendOtpSchema = Joi.object().keys({
 	phoneNumber: Joi.string().required(),
 });
 

@@ -43,7 +43,7 @@ export const userSignup = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.USER_TITLE,
-					Lang.SUCCESS,
+					Lang.SIGNUP_USER_SUCCESS,
 					data,
 				);
 			})
@@ -72,7 +72,7 @@ export const fetchUsersList = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.USER_TITLE,
-					Lang.SUCCESS,
+					Lang.USER_FETCH_SUCCESS,
 					result,
 				);
 			})
@@ -142,7 +142,7 @@ export const loginUser = async (req, res, next) => {
 		return respondError(
 			res,
 			StatusCodes.INTERNAL_SERVER_ERROR,
-			Lang.LOGIN_TITLE,
+			Lang.USER_TITLE,
 			error.message,
 		);
 	}
@@ -169,7 +169,7 @@ export const updateUser = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.USER_TITLE,
-					Lang.SUCCESS,
+					Lang.USER_UPDATE_SUCCESS,
 					result,
 				);
 			})
@@ -187,7 +187,7 @@ export const updateUser = async (req, res, next) => {
 		return respondError(
 			res,
 			StatusCodes.INTERNAL_SERVER_ERROR,
-			Lang.LOGIN_TITLE,
+			Lang.USER_TITLE,
 			error.message,
 		);
 	}
@@ -202,7 +202,7 @@ export const fetchUserProfile = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.USER_TITLE,
-					Lang.SUCCESS,
+					Lang.USER_FETCH_SUCCESS,
 					result,
 				);
 			})
@@ -260,8 +260,8 @@ export const resetUserPassword = async (req, res, _next) => {
 				return respondSuccess(
 					res,
 					StatusCodes.OK,
-					Lang.USER_TITLE,
-					Lang.SUCCESS,
+					Lang.RESET_PASSWORD_TITLE,
+					Lang.RESET_PASSWORD_SUCCESS_MESSAGE,
 					result,
 				);
 			})
@@ -279,8 +279,33 @@ export const resetUserPassword = async (req, res, _next) => {
 		return respondError(
 			res,
 			StatusCodes.INTERNAL_SERVER_ERROR,
-			Lang.LOGIN_TITLE,
+			Lang.RESET_PASSWORD_TITLE,
 			error.message,
 		);
 	}
+};
+
+export const resendToken = async (req, res, next) => {
+	const { phoneNumber } = req.body;
+	const userExists = await getUserByCondition({ phoneNumber });
+	if (!userExists) {
+		const err = new Error(Lang.USER_NOT_FOUND);
+		err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+		err.title = Lang.FORGOT_PASSWORD_TITLE;
+		return next(err);
+	}
+	const payload = {
+		phoneNumber: userExists.phoneNumber,
+		user: userExists._id,
+	};
+	sendOtpVerification({ data: payload, type: 'RESEND' })
+		.then(_result => {
+			return respondSuccess(
+				res,
+				StatusCodes.OK,
+				Lang.OTP_VERIFICATION_TITLE,
+				Lang.OTP_SENT_SUCCESS,
+			);
+		})
+		.catch(e => next(e));
 };

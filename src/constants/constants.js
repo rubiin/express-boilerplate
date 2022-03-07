@@ -11,32 +11,34 @@ const responseMessages = {
 		SOMETHING_WENT_WRONG: 'Something went wrong. Please try again later.',
 		BAD_REQUEST:
 			'Something went wrong with requested url. Please try again later.',
-
-		INACTIVE_USER:
-			'Account is disabled or deactivated. Please contact admin.',
 		LOGIN_FAILURE_MESSAGE: 'Login failed',
 		CREDENTIAL_FAILED: 'Email/Password is invalid. Please try again.',
 		USER_NOT_FOUND:
 			'We are unable to find any account associated with this number.',
 
-		FORGOT_PASSWORD_TITLE: 'Forgot password',
-		FORGOT_PASSWORD_SUCCESS_MESSAGE:
-			'Otp sent successfully. Please check your inbox.',
-		FORGOT_PASSWORD_FAILURE_MESSAGE: 'Forgot password failed',
-
-		RESET_PASSWORD_TITLE: 'Reset password',
-		RESET_PASSWORD_SUCCESS_MESSAGE: 'Password changed successfully.',
 		RESET_PASSWORD_FAILURE_MESSAGE: 'Forgot password failed',
 		TOKEN_EXPIRED_MESSAGE: 'Token expired',
 		CHANGE_PASSWORD: 'Change password',
 		PASSWORD_NOT_MATCH: 'Old password does not match',
 
+		FORGOT_PASSWORD_TITLE: 'Forgot password',
+		FORGOT_PASSWORD_SUCCESS_MESSAGE:
+			'Otp sent successfully. Please check your inbox.',
+
+		RESET_PASSWORD_TITLE: 'Reset password',
+
+		// otp
+		OTP_EXPIRED_MESSAGE:
+			'Otp expired. Please try sending the device verification code and try again',
+		OTP_VERIFICATION_TITLE: 'Otp verification',
+		OTP_SENT_SUCCESS: 'Otp sent successfully. Please check your inbox.',
+		OTP_VERIFICATION_ERROR:
+			'Device cannot be verified successfully at the moment. Please try sending the device verification code and try agai',
+
+		// login
+		RESET_PASSWORD_SUCCESS_MESSAGE: 'Password changed successfully.',
 		LOGIN_TITLE: 'Login',
 		LOGIN_SUCCESS_MESSAGE: 'Logged in successfully',
-		LOGOUT_TITLE: 'Logout',
-		LOGOUT_FAILURE_MESSAGE: 'Could not log out. Please try again later',
-		LOGOUT_SUCCESS_MESSAGE: 'Logged out successfully',
-		DEVICE_NOT_FOUND: 'Device not found',
 
 		// token
 		TOKEN_TITLE: 'Token',
@@ -46,13 +48,16 @@ const responseMessages = {
 		// user
 
 		USER_TITLE: 'User',
+		SIGNUP_USER_SUCCESS: 'User signup success',
 		USER_EXISTS: 'Users with phone number already exists',
 		USER_FETCH_SUCCESS: 'User fetched successfully.',
+		USER_UPDATE_SUCCESS: 'User updated successfully.',
 		USER_FETCH_FAILURE: 'User fetched failure.',
 
 		// event
 		EVENT_TITLE: 'Event',
 		EVENT_FETCH_SUCCESS: 'Event fetched successfully.',
+		EVENT_CREATE_SUCCESS: 'Event created successfully.',
 		EVENT_FETCH_FAILURE: 'Event fetched failure.',
 
 		// image
