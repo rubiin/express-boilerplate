@@ -18,6 +18,10 @@ export const updateUserProfile = async (data, id) => {
 	);
 };
 
+export const updateUserPassword = async (password, id) => {
+	return UserModel.findOneAndUpdate({ _id: id }, { password }, { new: true });
+};
+
 export const getUserList = async (
 	options = {
 		page: 1,

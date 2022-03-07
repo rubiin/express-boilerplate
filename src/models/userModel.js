@@ -73,15 +73,12 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 	return bcrypt.compare(candidatePassword, this.password);
 };
 
-UserSchema.pre('updateOne', function (next) {
-	if (!this._update.$set.password) {
+UserSchema.pre('findOneAndUpdate', function (next) {
+	if (!this._update.password) {
 		next();
 	}
 
-	this._update.$set.password = bcrypt.hashSync(
-		this._update.$set.password,
-		saltRounds,
-	);
+	this._update.password = bcrypt.hashSync(this._update.password, saltRounds);
 
 	next();
 });

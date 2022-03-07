@@ -4,9 +4,9 @@ import {
 	fetchUsersList,
 	forgotPassword,
 	loginUser,
+	resetUserPassword,
 	saveUser,
 	updateUser,
-	updateUserPassword,
 } from '../../controllers/userController';
 import { validateRequestBody } from '../../validations/validator';
 import { authenticateToken } from '../../utils/jwt';
@@ -14,7 +14,6 @@ import upload from '../../utils/fileUpload';
 import {
 	createUserSchema,
 	updateUserSchema,
-	// eslint-disable-next-line import/named
 	forgotPasswordSchema,
 	resetPasswordSchema,
 } from '../../validations/schemas/userSchema';
@@ -35,10 +34,10 @@ router.post(
 	validateRequestBody(forgotPasswordSchema),
 	forgotPassword,
 );
-router.post(
+router.put(
 	'/reset-password',
 	validateRequestBody(resetPasswordSchema),
-	updateUserPassword,
+	resetUserPassword,
 );
 router.get('/profile', authenticateToken, fetchUserProfile);
 router.get('/', authenticateToken, fetchUsersList);

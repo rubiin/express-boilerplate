@@ -33,11 +33,15 @@ export const forgotPasswordSchema = Joi.object().keys({
 });
 
 export const resetPasswordSchema = Joi.object().keys({
+	otpCode: Joi.string().required(),
 	password: Joi.string()
 		.required()
 		.pattern(passwordRegex)
 		.message(
 			'Password must be at least 8 characters long and contain at least one number, one letter and one special character',
 		),
-	confirmPassword: Joi.string().required().valid(Joi.ref('password')),
+	confirmPassword: Joi.string()
+		.required()
+		.valid(Joi.ref('password'))
+		.messages({ 'any.only': 'Passwords do not match' }),
 });

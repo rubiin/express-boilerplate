@@ -38,7 +38,7 @@ export const sendOtpVerification = async ({ data, type }) => {
 	await sendOtp(content, data.phoneNumber);
 
 	const otp = new OtpModel({
-		userId: data.user,
+		user: data.user,
 		phoneNumber: data.phoneNumber,
 		verificationCode: otpNumber,
 	});

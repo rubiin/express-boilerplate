@@ -34,7 +34,7 @@ const verifyOtp = async (req, res) => {
 		}
 
 		const response = await verifyDevice(
-			codeDetails.userId,
+			codeDetails.user,
 			codeDetails.phoneNumber,
 			codeDetails._id,
 		);

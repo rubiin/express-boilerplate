@@ -23,7 +23,7 @@ const responseMessages = {
 
 		FORGOT_PASSWORD_TITLE: 'Forgot password',
 		FORGOT_PASSWORD_SUCCESS_MESSAGE:
-			'Password reset link sent successfully. Please check your inbox.',
+			'Otp sent successfully. Please check your inbox.',
 		FORGOT_PASSWORD_FAILURE_MESSAGE: 'Forgot password failed',
 
 		RESET_PASSWORD_TITLE: 'Reset password',

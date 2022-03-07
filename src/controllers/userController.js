@@ -5,6 +5,7 @@ import {
 	getUserByCondition,
 	getUserById,
 	getUserList,
+	updateUserPassword,
 	updateUserProfile,
 } from '../repositories/userRepository';
 import { respondError, respondSuccess } from '../utils/responseHelper';
@@ -14,6 +15,7 @@ import {
 	sendOtpVerification,
 } from '../utils/generic';
 import { generateJWTToken } from '../utils/jwt';
+import OtpModel from '../models/otpModel';
 
 export const saveUser = async (req, res, next) => {
 	try {
@@ -243,13 +245,15 @@ export const forgotPassword = async (req, res, next) => {
 		.catch(e => next(e));
 };
 
-export const updateUserPassword = async (req, res, _next) => {
+export const resetUserPassword = async (req, res, _next) => {
 	try {
-		const data = {
-			password: req.body.password,
-		};
+		const { password, otpCode } = req.body;
 
-		updateUserProfile(data, req.user._id)
+		const details = await OtpModel.findOne({
+			verificationCode: otpCode,
+		}).exec();
+
+		updateUserPassword(password, details.user)
 			.then(result => {
 				return respondSuccess(
 					res,
