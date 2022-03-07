@@ -242,3 +242,39 @@ export const forgotPassword = async (req, res, next) => {
 		})
 		.catch(e => next(e));
 };
+
+export const updateUserPassword = async (req, res, _next) => {
+	try {
+		const data = {
+			password: req.body.password,
+		};
+
+		updateUserProfile(data, req.user._id)
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.USER_TITLE,
+					Lang.SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log(error);
+		return respondError(
+			res,
+			StatusCodes.INTERNAL_SERVER_ERROR,
+			Lang.LOGIN_TITLE,
+			error.message,
+		);
+	}
+};

@@ -28,3 +28,20 @@ export const updateUserSchema = Joi.object().keys({
 	phoneNumber: Joi.string().optional().label('Phone Number'),
 	fullName: Joi.string().optional().min(5).max(50).label('Full Name'),
 });
+
+export const forgotPasswordSchema = Joi.object().keys({
+	phoneNumber: Joi.string().required().label('Phone Number'),
+});
+
+export const resetPasswordSchema = Joi.object().keys({
+	password: Joi.string()
+		.required()
+		.pattern(
+			/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+		)
+		.message(
+			'Password must be at least 8 characters long and contain at least one number, one letter and one special character',
+		)
+		.label('Password'),
+	confirmPassword: Joi.string().required().valid(Joi.ref('password')),
+});
