@@ -22,10 +22,25 @@ export const getEventList = async (
 		page: 1,
 		limit: 10,
 		sort: 'desc',
+		type: 'past',
 	},
 ) => {
 	options.sort = options.sort === 'desc' ? -1 : 1;
+
+	let matchCondition = {
+		startDateTime: { $gte: new Date() },
+	};
+
+	if (options.type === 'past') {
+		matchCondition = {
+			startDateTime: { $lte: new Date() },
+		};
+	}
+
 	const data = await EventModel.aggregate([
+		{
+			$match: matchCondition,
+		},
 		{
 			$sort: {
 				createdAt: options.sort,

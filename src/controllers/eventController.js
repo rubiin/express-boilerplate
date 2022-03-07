@@ -1,10 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
-import {
-	convertStringIdToObjectId,
-	sendOtpVerification,
-} from '../utils/generic';
+import { convertStringIdToObjectId } from '../utils/generic';
 import { createHost } from '../repositories/hostRepository';
 import {
 	createEvent,
@@ -51,7 +48,7 @@ export const saveEvent = async (req, res, next) => {
 					StatusCodes.OK,
 					Lang.USER_TITLE,
 					Lang.SUCCESS,
-					data,
+					result,
 				);
 			})
 			.catch(err => {
