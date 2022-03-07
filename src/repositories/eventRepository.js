@@ -115,5 +115,5 @@ export const getEventByCondition = async condition => {
 	return EventModel.findOne(condition).exec();
 };
 export const getEventById = async id => {
-	return EventModel.findById(id).lean().exec();
+	return EventModel.findById(id).populate(['host', 'location']).lean().exec();
 };

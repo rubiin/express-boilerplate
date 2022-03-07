@@ -5,8 +5,9 @@ import {
 	forgotPassword,
 	loginUser,
 	resetUserPassword,
-	saveUser,
 	updateUser,
+	// eslint-disable-next-line import/named
+	userSignup,
 } from '../../controllers/userController';
 import { validateRequestBody } from '../../validations/validator';
 import { authenticateToken } from '../../utils/jwt';
@@ -20,7 +21,7 @@ import {
 
 const router = express.Router();
 
-router.post('/', validateRequestBody(createUserSchema), saveUser);
+router.post('/', validateRequestBody(createUserSchema), userSignup);
 router.put(
 	'/',
 	authenticateToken,

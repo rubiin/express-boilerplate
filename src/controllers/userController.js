@@ -17,7 +17,7 @@ import {
 import { generateJWTToken } from '../utils/jwt';
 import OtpModel from '../models/otpModel';
 
-export const saveUser = async (req, res, next) => {
+export const userSignup = async (req, res, next) => {
 	try {
 		const data = req.body;
 
@@ -62,7 +62,6 @@ export const saveUser = async (req, res, next) => {
 	}
 };
 
-// get user list
 export const fetchUsersList = async (req, res, next) => {
 	try {
 		const options = req.query;
@@ -107,9 +106,11 @@ export const loginUser = async (req, res, next) => {
 			return next(err);
 		}
 
-		const isMatchPassword = await userExists.comparePassword(password);
+		// check if the provided password match the stored password
 
-		if (!isMatchPassword) {
+		const isPasswordCorrect = await userExists.comparePassword(password);
+
+		if (!isPasswordCorrect) {
 			const err = new Error(Lang.CREDENTIAL_FAILED);
 			err.code = err.status = StatusCodes.UNAUTHORIZED;
 			err.title = Lang.LOGIN_TITLE;
@@ -255,6 +256,7 @@ export const resetUserPassword = async (req, res, _next) => {
 
 		updateUserPassword(password, details.user)
 			.then(result => {
+				result = omit(result, ['password']);
 				return respondSuccess(
 					res,
 					StatusCodes.OK,

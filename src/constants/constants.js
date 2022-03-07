@@ -12,8 +12,6 @@ const responseMessages = {
 		BAD_REQUEST:
 			'Something went wrong with requested url. Please try again later.',
 
-		ACCOUNT_DISABLED_TITLE: 'Account Disabled',
-
 		INACTIVE_USER:
 			'Account is disabled or deactivated. Please contact admin.',
 		LOGIN_FAILURE_MESSAGE: 'Login failed',

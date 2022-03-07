@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import createError from 'http-errors';
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import multer from 'multer';
 import connectDb from './utils/database';
 import routes from './routes/v1';
@@ -16,6 +17,7 @@ connectDb();
 app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(helmet());
+app.use(compression());
 app.use(cors());
 app.use(
 	bodyParser.urlencoded({
