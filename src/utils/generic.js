@@ -41,6 +41,9 @@ export const sendOtpVerification = async ({ data, type }) => {
 		user: data.user,
 		phoneNumber: data.phoneNumber,
 		verificationCode: otpNumber,
+		expiryDate: new Date(
+			new Date().getTime() + 4 * 24 * 60 * 60 * 1000,
+		).getTime(),
 	});
 	return otp.save();
 };
