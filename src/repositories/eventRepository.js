@@ -1,4 +1,6 @@
 import EventModel from '../models/eventModel';
+import InvitationModel from '../models/invitationModel';
+import { convertStringIdToObjectId } from '../utils/generic';
 
 // create event
 export const createEvent = async data => {
@@ -116,4 +118,28 @@ export const getEventByCondition = async condition => {
 };
 export const getEventById = async id => {
 	return EventModel.findById(id).populate(['host', 'location']).lean().exec();
+};
+
+export const saveInvites = async (eventId, guests) => {
+	return InvitationModel.insertMany(
+		guests.map(guest => {
+			return { event: eventId, guest };
+		}),
+	);
+};
+
+export const saveRsvp = async ({ eventId, guestId, going }) => {
+	return InvitationModel.findOneAndUpdate(
+		{
+			event: convertStringIdToObjectId(eventId),
+			guest: convertStringIdToObjectId(guestId),
+		},
+		{
+			isRsvped: true,
+			going,
+		},
+		{
+			new: true,
+		},
+	).exec();
 };

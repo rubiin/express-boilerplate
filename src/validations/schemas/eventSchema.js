@@ -3,7 +3,7 @@ import JoiDate from '@hapi/joi-date';
 
 const Joi = JoiBase.extend(JoiDate);
 
-const eventCreateSchema = Joi.object().keys({
+export const eventCreateSchema = Joi.object().keys({
 	title: Joi.string().required().min(3).max(50),
 	description: Joi.string().required().min(3).max(50),
 	startDateTime: Joi.string().required(),
@@ -18,4 +18,10 @@ const eventCreateSchema = Joi.object().keys({
 	zipCode: Joi.string().optional().allow('').allow(null),
 });
 
-export default eventCreateSchema;
+export const inviteSchema = Joi.object().keys({
+	guests: Joi.array().items(Joi.string()),
+});
+
+export const rsvpSchema = Joi.object().keys({
+	going: Joi.string().required().enum(['YES', 'NO', 'MAYBE']),
+});

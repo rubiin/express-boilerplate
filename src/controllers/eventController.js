@@ -7,6 +7,8 @@ import {
 	createEvent,
 	getEventById,
 	getEventList,
+	saveInvites,
+	saveRsvp,
 } from '../repositories/eventRepository';
 import { getUserByCondition } from '../repositories/userRepository';
 import { createLocation } from '../repositories/locationRepository';
@@ -106,6 +108,66 @@ export const fetchEventById = async (req, res, next) => {
 					StatusCodes.OK,
 					Lang.EVENT_TITLE,
 					Lang.EVENT_FETCH_SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log('error', error);
+		next(error);
+	}
+};
+
+export const inviteGuests = async (req, res, next) => {
+	try {
+		const eventId = req.params.id;
+
+		saveInvites(eventId, req.body.guests)
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.EVENT_TITLE,
+					Lang.EVENT_FETCH_SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log('error', error);
+		next(error);
+	}
+};
+
+export const rsvpEvent = async (req, res, next) => {
+	try {
+		const eventId = req.params.id;
+		const { going } = req.body;
+		const guestId = req.user._id;
+
+		saveRsvp({ eventId, guestId, going })
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.EVENT_TITLE,
+					Lang.RSVP_SUCCESS,
 					result,
 				);
 			})

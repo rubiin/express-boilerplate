@@ -87,7 +87,11 @@
 		"node": ">=14"
 	},
 	"lint-staged": {
-		"*.{js,json,md,scss,yaml,yml}": [
+		"*.{js}": [
+			"eslint . --fix",
+			"prettier --write"
+		],
+		"*.{json,md,scss,yaml,yml}": [
 			"prettier --write"
 		]
 	},
