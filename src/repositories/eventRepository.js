@@ -120,10 +120,10 @@ export const getEventById = async id => {
 	return EventModel.findById(id).populate(['host', 'location']).lean().exec();
 };
 
-export const saveInvites = async (eventId, guests) => {
+export const saveInvites = async (eventId, users) => {
 	return InvitationModel.insertMany(
-		guests.map(guest => {
-			return { event: eventId, guest };
+		users.map(user => {
+			return { event: eventId, guest: user._id };
 		}),
 	);
 };

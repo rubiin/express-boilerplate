@@ -19,9 +19,9 @@ export const eventCreateSchema = Joi.object().keys({
 });
 
 export const inviteSchema = Joi.object().keys({
-	guests: Joi.array().items(Joi.string()),
+	phoneNumbers: Joi.array().items(Joi.string()),
 });
 
 export const rsvpSchema = Joi.object().keys({
-	going: Joi.string().required().enum(['YES', 'NO', 'MAYBE']),
+	going: Joi.string().required().valid('YES', 'NO', 'MAYBE'),
 });

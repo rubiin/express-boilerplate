@@ -129,8 +129,10 @@ export const fetchEventById = async (req, res, next) => {
 export const inviteGuests = async (req, res, next) => {
 	try {
 		const eventId = req.params.id;
-
-		saveInvites(eventId, req.body.guests)
+		const users = await getUserByCondition({
+			phoneNumber: { $in: req.body.phoneNumbers },
+		});
+		saveInvites(eventId, users)
 			.then(result => {
 				return respondSuccess(
 					res,
