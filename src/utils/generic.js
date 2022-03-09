@@ -9,28 +9,26 @@ export const convertStringIdToObjectId = id => {
 	}
 };
 
-export const sendOtp = (content, phone) => {
+export const sendOtp = async (content, phone) => {
 	// eslint-disable-next-line global-require
 	const client = require('twilio')(
 		process.env.TWILIO_ACCOUNT_SID,
 		process.env.TWILIO_AUTH_TOKEN,
 	);
-	return client.messages
-		.create({
+	try {
+		const message = await client.messages.create({
 			body: content,
 			from: process.env.TWILIO_PHONE_NUMBER,
 			to: `+977${phone}`,
-		})
-		.then(async message => {
-			console.log(message.sid);
-		})
-		.catch(err => {
-			console.log(err);
 		});
+		console.log(message.sid);
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 export const sendOtpVerification = async ({ data, type }) => {
-	const otpNumber = Math.floor(Math.random() * 1000000); // random six digit otp
+	const otpNumber = Math.floor(100000 + Math.random() * 900000); // random six digit otp
 	let content = `Your OTP verification code is ${otpNumber}`;
 	if (type === 'FORGOT_PASSWORD') {
 		content = `Your OTP code for password reset is ${otpNumber}`;

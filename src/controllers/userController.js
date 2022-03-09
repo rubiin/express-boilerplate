@@ -23,6 +23,7 @@ export const userSignup = async (req, res, next) => {
 
 		const userExists = await getUserByCondition({
 			phoneNumber: data.phoneNumber,
+			isVerified: true,
 		});
 
 		if (userExists) {
