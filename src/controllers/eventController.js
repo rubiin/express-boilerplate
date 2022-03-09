@@ -10,7 +10,10 @@ import {
 	saveInvites,
 	saveRsvp,
 } from '../repositories/eventRepository';
-import { getUserByCondition } from '../repositories/userRepository';
+import {
+	getUserByCondition,
+	getUsersByCondition,
+} from '../repositories/userRepository';
 import { createLocation } from '../repositories/locationRepository';
 
 export const saveEvent = async (req, res, next) => {
@@ -129,16 +132,18 @@ export const fetchEventById = async (req, res, next) => {
 export const inviteGuests = async (req, res, next) => {
 	try {
 		const eventId = req.params.id;
-		const users = await getUserByCondition({
+
+		const users = await getUsersByCondition({
 			phoneNumber: { $in: req.body.phoneNumbers },
 		});
+
 		saveInvites(eventId, users)
 			.then(result => {
 				return respondSuccess(
 					res,
 					StatusCodes.OK,
 					Lang.EVENT_TITLE,
-					Lang.EVENT_FETCH_SUCCESS,
+					Lang.INVITE_SUCCESS,
 					result,
 				);
 			})

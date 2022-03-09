@@ -77,6 +77,10 @@ export const getUserByCondition = async condition => {
 	return UserModel.findOne(condition).exec();
 };
 
+export const getUsersByCondition = async condition => {
+	return UserModel.find(condition).exec();
+};
+
 export const getUserById = async id => {
 	return UserModel.findById(id).lean().exec();
 };

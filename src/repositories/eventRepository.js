@@ -117,7 +117,51 @@ export const getEventByCondition = async condition => {
 	return EventModel.findOne(condition).exec();
 };
 export const getEventById = async id => {
-	return EventModel.findById(id).populate(['host', 'location']).lean().exec();
+	return EventModel.aggregate([
+		{ $match: { _id: convertStringIdToObjectId(id) } },
+		{
+			$lookup: {
+				from: 'locations',
+				localField: 'location',
+				foreignField: '_id',
+				as: 'location',
+			},
+		},
+		{
+			$unwind: {
+				path: '$location',
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
+			$lookup: {
+				from: 'hosts',
+				localField: 'host',
+				foreignField: '_id',
+				as: 'host',
+			},
+		},
+		{
+			$unwind: {
+				path: '$host',
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
+			$lookup: {
+				from: 'invitations',
+				localField: '_id',
+				foreignField: 'event',
+				as: 'invites',
+			},
+		},
+		{
+			$unwind: {
+				path: '$invites',
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+	]);
 };
 
 export const saveInvites = async (eventId, users) => {

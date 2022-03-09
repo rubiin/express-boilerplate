@@ -24,7 +24,7 @@ const InvitationSchema = new Schema(
 		going: {
 			type: String,
 			required: false,
-			enum: ['YES', 'NO', 'MAYBE'],
+			enum: ['YES', 'NO', 'MAYBE', null],
 			default: null,
 		},
 	},

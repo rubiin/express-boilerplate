@@ -60,6 +60,7 @@ const responseMessages = {
 		EVENT_CREATE_SUCCESS: 'Event created successfully.',
 		EVENT_FETCH_FAILURE: 'Event fetched failure.',
 		RSVP_SUCCESS: 'Event rsvp success.',
+		INVITE_SUCCESS: 'Users invited successfully.',
 
 		// image
 		IMAGE_UPLOAD_SUCCESS: 'Image uploaded successfully.',
