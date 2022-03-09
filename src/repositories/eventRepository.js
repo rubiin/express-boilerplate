@@ -1,5 +1,4 @@
 import EventModel from '../models/eventModel';
-import InvitationModel from '../models/invitationModel';
 import { convertStringIdToObjectId } from '../utils/generic';
 
 // create event
@@ -113,9 +112,6 @@ export const getEventList = async (
 	};
 };
 
-export const getEventByCondition = async condition => {
-	return EventModel.findOne(condition).exec();
-};
 export const getEventById = async id => {
 	return EventModel.aggregate([
 		{ $match: { _id: convertStringIdToObjectId(id) } },
@@ -147,43 +143,5 @@ export const getEventById = async id => {
 				preserveNullAndEmptyArrays: true,
 			},
 		},
-		{
-			$lookup: {
-				from: 'invitations',
-				localField: '_id',
-				foreignField: 'event',
-				as: 'invites',
-			},
-		},
-		{
-			$unwind: {
-				path: '$invites',
-				preserveNullAndEmptyArrays: true,
-			},
-		},
 	]);
-};
-
-export const saveInvites = async (eventId, users) => {
-	return InvitationModel.insertMany(
-		users.map(user => {
-			return { event: eventId, guest: user._id };
-		}),
-	);
-};
-
-export const saveRsvp = async ({ eventId, guestId, going }) => {
-	return InvitationModel.findOneAndUpdate(
-		{
-			event: convertStringIdToObjectId(eventId),
-			guest: convertStringIdToObjectId(guestId),
-		},
-		{
-			isRsvped: true,
-			going,
-		},
-		{
-			new: true,
-		},
-	).exec();
 };

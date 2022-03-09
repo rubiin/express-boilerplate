@@ -7,14 +7,17 @@ import {
 	createEvent,
 	getEventById,
 	getEventList,
-	saveInvites,
-	saveRsvp,
 } from '../repositories/eventRepository';
 import {
 	getUserByCondition,
 	getUsersByCondition,
 } from '../repositories/userRepository';
 import { createLocation } from '../repositories/locationRepository';
+import {
+	getInviteByCondition,
+	saveInvites,
+	saveRsvp,
+} from '../repositories/inviteRepository';
 
 export const saveEvent = async (req, res, next) => {
 	try {
@@ -167,6 +170,18 @@ export const rsvpEvent = async (req, res, next) => {
 		const eventId = req.params.id;
 		const { going } = req.body;
 		const guestId = req.user._id;
+
+		const findInvite = await getInviteByCondition({
+			event: convertStringIdToObjectId(eventId),
+			guest: convertStringIdToObjectId(guestId),
+		});
+
+		if (!findInvite) {
+			const err = new Error(Lang.INVITE_NOT_FOUND);
+			err.status = err.code = StatusCodes.NOT_FOUND;
+			err.title = Lang.EVENT_TITLE;
+			return next(err);
+		}
 
 		saveRsvp({ eventId, guestId, going })
 			.then(result => {

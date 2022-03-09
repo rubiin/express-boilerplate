@@ -61,6 +61,8 @@ const responseMessages = {
 		EVENT_FETCH_FAILURE: 'Event fetched failure.',
 		RSVP_SUCCESS: 'Event rsvp success.',
 		INVITE_SUCCESS: 'Users invited successfully.',
+		INVITE_NOT_FOUND:
+			'We are unable to find any invite for the user for the event',
 
 		// image
 		IMAGE_UPLOAD_SUCCESS: 'Image uploaded successfully.',
