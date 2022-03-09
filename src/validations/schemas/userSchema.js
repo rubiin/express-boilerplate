@@ -3,13 +3,16 @@ import JoiDate from '@hapi/joi-date';
 
 const Joi = JoiBase.extend(JoiDate);
 
-// const phoneRegex = new RegExp('/9(8|7)\\d{8}/'); // matches phone with 98 and 97 followed by 8 other digits
+const phoneRegex = /^9(7|8)\d{8}$/;
 
 const passwordRegex =
 	/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
 export const createUserSchema = Joi.object().keys({
-	phoneNumber: Joi.string().required(),
+	phoneNumber: Joi.string()
+		.required()
+		.pattern(phoneRegex)
+		.message('Phone number must be 10 digits long and start with 98 or 97'),
 	fullName: Joi.string().required().min(5).max(50),
 	password: Joi.string()
 		.required()
@@ -24,12 +27,18 @@ export const updateUserSchema = Joi.object().keys({
 		.required()
 		.email({ tlds: { allow: false } }),
 	address: Joi.string().required().max(50),
-	phoneNumber: Joi.string().optional(),
+	phoneNumber: Joi.string()
+		.optional()
+		.pattern(phoneRegex)
+		.message('Phone number must be 10 digits long and start with 98 or 97'),
 	fullName: Joi.string().optional().min(5).max(50),
 });
 
 export const sendOtpSchema = Joi.object().keys({
-	phoneNumber: Joi.string().required(),
+	phoneNumber: Joi.string()
+		.required()
+		.pattern(phoneRegex)
+		.message('Phone number must be 10 digits long and start with 98 or 97'),
 });
 
 export const resetPasswordSchema = Joi.object().keys({
