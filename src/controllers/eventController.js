@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
-import { convertStringIdToObjectId } from '../utils/generic';
+import { convertStringIdToObjectId, resizeImage } from '../utils/generic';
 import { createHost } from '../repositories/hostRepository';
 import {
 	createEvent,
@@ -33,6 +33,8 @@ export const saveEvent = async (req, res, next) => {
 			err.title = Lang.USER_TITLE;
 			return next(err);
 		}
+
+		await resizeImage(req, 500);
 
 		const data = req.body;
 

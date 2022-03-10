@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import sharp from 'sharp';
+import path from 'path';
+import fs from 'fs';
 import OtpModel from '../models/otpModel';
 
 export const convertStringIdToObjectId = id => {
@@ -44,4 +47,13 @@ export const sendOtpVerification = async ({ data, type }) => {
 		).getTime(),
 	});
 	return otp.save();
+};
+
+export const resizeImage = async (req, quality = 500) => {
+	const { filename: image } = req.file;
+
+	const imagePath = path.resolve(req.file.destination, 'images', image);
+
+	await sharp(req.file.path).resize(quality).toFile(imagePath);
+	fs.unlinkSync(req.file.path);
 };
