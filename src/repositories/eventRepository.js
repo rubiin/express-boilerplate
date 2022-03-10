@@ -18,6 +18,26 @@ export const createEvent = async data => {
 	return event.save();
 };
 
+export const updateEventById = async (id, data) => {
+	return EventModel.findByIdAndUpdate(
+		{
+			_id: convertStringIdToObjectId(id),
+		},
+		{
+			$set: data,
+		},
+		{ useFindAndModify: false, new: true },
+	);
+};
+
+export const deleteEventById = async eventId => {
+	return EventModel.findByIdAndDelete(convertStringIdToObjectId(eventId));
+};
+
+export const findEventByCondition = async condition => {
+	return EventModel.findById(condition);
+};
+
 export const getEventList = async (
 	options = {
 		page: 1,

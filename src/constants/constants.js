@@ -58,7 +58,9 @@ const responseMessages = {
 		EVENT_TITLE: 'Event',
 		EVENT_FETCH_SUCCESS: 'Event fetched successfully.',
 		EVENT_CREATE_SUCCESS: 'Event created successfully.',
+		EVENT_DELETE_SUCCESS: 'Event created successfully.',
 		EVENT_FETCH_FAILURE: 'Event fetched failure.',
+		EVENT_DOES_NOT_EXIST: 'Event does not exists.',
 		RSVP_SUCCESS: 'Event rsvp success.',
 		INVITE_SUCCESS: 'Users invited successfully.',
 		INVITE_NOT_FOUND:
