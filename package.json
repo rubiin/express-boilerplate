@@ -1,104 +1,100 @@
 {
-    "name": "express-rsvp",
-    "version": "1.2.0",
-    "private": false,
-    "author": {
-        "name": "Rubin",
-        "url": "https://github.com/rubiin"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "@babel/cli": "^7.17.6",
-        "@babel/core": "^7.17.5",
-        "@babel/node": "^7.16.8",
-        "@babel/preset-env": "^7.16.11",
-        "@hapi/joi-date": "^2.0.1",
-        "@rubiin/js-utils": "^2.1.6",
-        "bcryptjs": "^2.4.3",
-        "body-parser": "^1.19.2",
-        "compression": "^1.7.4",
-        "cookie-parser": "~1.4.6",
-        "cors": "^2.8.5",
-        "cross-env": "^7.0.3",
-        "date-fns": "^2.28.0",
-        "debug": "~4.3.3",
-        "dotenv": "^16.0.0",
-        "express": "~4.17.3",
-        "helmet": "^5.0.2",
-        "http-errors": "^2.0.0",
-        "http-status-codes": "^2.2.0",
-        "joi": "^17.6.0",
-        "joi-objectid": "^4.0.2",
-        "jsonwebtoken": "^8.5.1",
-        "mongoose": "^6.2.6",
-        "mongoose-aggregate-paginate-v2": "^1.0.6",
-        "mongoose-delete": "^0.5.4",
-        "mongoose-paginate-hook": "^0.0.3",
-        "morgan": "~1.10.0",
-        "multer": "^1.4.4",
-        "nodemon": "^2.0.15",
-        "npm-run-all": "^4.1.5",
-        "rimraf": "^3.0.2",
-        "sharp": "^0.30.2",
-        "twilio": "^3.75.1"
-    },
-    "devDependencies": {
-        "commitizen": "^4.2.4",
-        "cz-conventional-changelog": "^3.3.0",
-        "eslint": "^8.11.0",
-        "eslint-config-airbnb-base": "^15.0.0",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-import": "^2.25.4",
-        "eslint-plugin-jest": "^26.1.1",
-        "eslint-plugin-prettier": "^4.0.0",
-        "eslint-plugin-security": "^1.4.0",
-        "husky": "^7.0.4",
-        "jest": "^27.5.1",
-        "lint-staged": "^12.3.5",
-        "prettier": "^2.5.1"
-    },
-    "babel": {
-        "presets": [
-            "@babel/preset-env"
-        ]
-    },
-    "jest": {
-        "testEnvironment": "node"
-    },
-    "nodemonConfig": {
-        "watch": [
-            "src/*"
-        ],
-        "ignore": [
-            "**/__tests__/**",
-            "*.test.js",
-            "*.spec.js"
-        ]
-    },
-    "scripts": {
-        "dev": "cross-env NODE_ENV=dev DEBUG=http nodemon --exec babel-node ./src/bin/www.js",
-        "clean": "rm -rf dist",
-        "build": "npm run clean && babel ./src --out-dir dist --copy-files",
-        "prod": "cross-env NODE_ENV=production DEBUG=http node ./dist/bin/www.js",
-        "format": "prettier --write \"src/**/*.js\"",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix"
-    },
-    "engines": {
-        "node": ">=14"
-    },
-    "lint-staged": {
-        "*.{js}": [
-            "eslint . --fix",
-            "prettier --write"
-        ],
-        "*.{json,md,scss,yaml,yml}": [
-            "prettier --write"
-        ]
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
-    }
+	"name": "express-rsvp",
+	"version": "1.2.0",
+	"private": false,
+	"license": "MIT",
+	"dependencies": {
+		"@babel/cli": "^7.17.6",
+		"@babel/core": "^7.17.5",
+		"@babel/node": "^7.16.8",
+		"@babel/preset-env": "^7.16.11",
+		"@hapi/joi-date": "^2.0.1",
+		"@rubiin/js-utils": "^2.1.6",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.19.2",
+		"compression": "^1.7.4",
+		"cookie-parser": "~1.4.6",
+		"cors": "^2.8.5",
+		"cross-env": "^7.0.3",
+		"date-fns": "^2.28.0",
+		"debug": "~4.3.3",
+		"dotenv": "^16.0.0",
+		"express": "~4.17.3",
+		"helmet": "^5.0.2",
+		"http-errors": "^2.0.0",
+		"http-status-codes": "^2.2.0",
+		"joi": "^17.6.0",
+		"joi-objectid": "^4.0.2",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.2.6",
+		"mongoose-aggregate-paginate-v2": "^1.0.6",
+		"mongoose-delete": "^0.5.4",
+		"mongoose-paginate-hook": "^0.0.3",
+		"morgan": "~1.10.0",
+		"multer": "^1.4.4",
+		"nodemon": "^2.0.15",
+		"npm-run-all": "^4.1.5",
+		"rimraf": "^3.0.2",
+		"sharp": "^0.30.2",
+		"twilio": "^3.75.1"
+	},
+	"devDependencies": {
+		"commitizen": "^4.2.4",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^8.11.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-import": "^2.25.4",
+		"eslint-plugin-jest": "^26.1.1",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-security": "^1.4.0",
+		"husky": "^7.0.4",
+		"jest": "^27.5.1",
+		"lint-staged": "^12.3.5",
+		"prettier": "^2.5.1"
+	},
+	"babel": {
+		"presets": [
+			"@babel/preset-env"
+		]
+	},
+	"jest": {
+		"testEnvironment": "node"
+	},
+	"nodemonConfig": {
+		"watch": [
+			"src/*"
+		],
+		"ignore": [
+			"**/__tests__/**",
+			"*.test.js",
+			"*.spec.js"
+		]
+	},
+	"scripts": {
+		"dev": "cross-env NODE_ENV=dev DEBUG=http nodemon --exec babel-node ./src/bin/www.js",
+		"clean": "rm -rf dist",
+		"build": "npm run clean && babel ./src --out-dir dist --copy-files",
+		"prod": "cross-env NODE_ENV=production DEBUG=http node ./dist/bin/www.js",
+		"format": "prettier --write \"src/**/*.js\"",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
+	"engines": {
+		"node": ">=14"
+	},
+	"lint-staged": {
+		"*.{js}": [
+			"eslint . --fix",
+			"prettier --write"
+		],
+		"*.{json,md,scss,yaml,yml}": [
+			"prettier --write"
+		]
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	}
 }
