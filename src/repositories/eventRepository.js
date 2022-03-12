@@ -1,5 +1,4 @@
 import EventModel from '../models/eventModel';
-import InvitationModel from '../models/invitationModel';
 import { convertStringIdToObjectId } from '../utils/generic';
 
 // create event
@@ -17,6 +16,26 @@ export const createEvent = async data => {
 	event.eventCategory = data.eventCategory;
 	event.eventType = data.eventType;
 	return event.save();
+};
+
+export const updateEventById = async (id, data) => {
+	return EventModel.findByIdAndUpdate(
+		{
+			_id: convertStringIdToObjectId(id),
+		},
+		{
+			$set: data,
+		},
+		{ useFindAndModify: false, new: true },
+	);
+};
+
+export const deleteEventById = async eventId => {
+	return EventModel.findByIdAndDelete(convertStringIdToObjectId(eventId));
+};
+
+export const findEventByCondition = async condition => {
+	return EventModel.findById(condition);
 };
 
 export const getEventList = async (
@@ -113,77 +132,37 @@ export const getEventList = async (
 	};
 };
 
-export const getEventByCondition = async condition => {
-	return EventModel.findOne(condition).exec();
-};
 export const getEventById = async id => {
-	return EventModel.aggregate([
+	return EventModel.db.getCollection('events').aggregate([
 		{ $match: { _id: convertStringIdToObjectId(id) } },
-		{
-			$lookup: {
-				from: 'locations',
-				localField: 'location',
-				foreignField: '_id',
-				as: 'location',
-			},
-		},
-		{
-			$unwind: {
-				path: '$location',
-				preserveNullAndEmptyArrays: true,
-			},
-		},
-		{
-			$lookup: {
-				from: 'hosts',
-				localField: 'host',
-				foreignField: '_id',
-				as: 'host',
-			},
-		},
-		{
-			$unwind: {
-				path: '$host',
-				preserveNullAndEmptyArrays: true,
-			},
-		},
+
 		{
 			$lookup: {
 				from: 'invitations',
 				localField: '_id',
 				foreignField: 'event',
-				as: 'invites',
+				as: 'invitations',
 			},
 		},
+
+		{
+			$unwind: '$invitations',
+		},
+
+		{
+			$lookup: {
+				from: 'users',
+				localField: 'invitations.guest',
+				foreignField: '_id',
+				as: 'invitations.guest',
+			},
+		},
+
 		{
 			$unwind: {
-				path: '$invites',
+				path: '$invitations.guest',
 				preserveNullAndEmptyArrays: true,
 			},
 		},
 	]);
-};
-
-export const saveInvites = async (eventId, users) => {
-	return InvitationModel.insertMany(
-		users.map(user => {
-			return { event: eventId, guest: user._id };
-		}),
-	);
-};
-
-export const saveRsvp = async ({ eventId, guestId, going }) => {
-	return InvitationModel.findOneAndUpdate(
-		{
-			event: convertStringIdToObjectId(eventId),
-			guest: convertStringIdToObjectId(guestId),
-		},
-		{
-			isRsvped: true,
-			going,
-		},
-		{
-			new: true,
-		},
-	).exec();
 };

@@ -139,7 +139,7 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-uploads/*
-!uploads/.gitkeep
+uploads/images/*
+!uploads/images/.gitkeep
 
 # End of https://www.toptal.com/developers/gitignore/api/node

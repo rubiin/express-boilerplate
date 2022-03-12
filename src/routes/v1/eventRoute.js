@@ -1,10 +1,12 @@
 import express from 'express';
 import {
+	deleteEvent,
 	fetchEventById,
 	fetchEventList,
 	inviteGuests,
 	rsvpEvent,
 	saveEvent,
+	updateEvent,
 } from '../../controllers/eventController';
 import { authenticateToken } from '../../utils/jwt';
 import { validateRequestBody } from '../../validations/validator';
@@ -27,12 +29,21 @@ router.post(
 	saveEvent,
 );
 
+router.put(
+	'/',
+	authenticateToken,
+	validateRequestBody(eventCreateSchema),
+	updateEvent,
+);
+
 router.post(
 	'/:id/invite',
 	authenticateToken,
 	validateRequestBody(inviteSchema),
 	inviteGuests,
 );
+
+router.delete('/:id', authenticateToken, deleteEvent);
 
 router.put(
 	'/:id/rsvp',

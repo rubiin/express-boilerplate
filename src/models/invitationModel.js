@@ -27,6 +27,11 @@ const InvitationSchema = new Schema(
 			enum: ['YES', 'NO', 'MAYBE', null],
 			default: null,
 		},
+		message: {
+			type: String,
+			required: false,
+			default: null,
+		},
 	},
 	{ timestamps: true },
 );
