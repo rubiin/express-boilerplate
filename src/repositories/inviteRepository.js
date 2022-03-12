@@ -13,7 +13,7 @@ export const getInviteByCondition = async condition => {
 	return InvitationModel.find(condition);
 };
 
-export const saveRsvp = async ({ eventId, guestId, going }) => {
+export const saveRsvp = async ({ eventId, guestId, data }) => {
 	return InvitationModel.findOneAndUpdate(
 		{
 			event: convertStringIdToObjectId(eventId),
@@ -21,7 +21,7 @@ export const saveRsvp = async ({ eventId, guestId, going }) => {
 		},
 		{
 			isRsvped: true,
-			going,
+			...data,
 		},
 		{
 			new: true,

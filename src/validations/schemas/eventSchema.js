@@ -33,4 +33,5 @@ export const inviteSchema = Joi.object().keys({
 
 export const rsvpSchema = Joi.object().keys({
 	going: Joi.string().required().valid('YES', 'NO', 'MAYBE'),
+	message: Joi.string().optional().allow('').allow(null),
 });

@@ -233,7 +233,7 @@ export const deleteEvent = async (req, res, next) => {
 					res,
 					StatusCodes.OK,
 					Lang.EVENT_TITLE,
-					Lang.EVENT_FETCH_SUCCESS,
+					Lang.EVENT_DELETE_SUCCESS,
 					result,
 				);
 			})
@@ -255,7 +255,7 @@ export const deleteEvent = async (req, res, next) => {
 export const rsvpEvent = async (req, res, next) => {
 	try {
 		const eventId = req.params.id;
-		const { going } = req.body;
+		const data = req.body;
 		const guestId = req.user._id;
 
 		const findInvite = await getInviteByCondition({
@@ -270,7 +270,7 @@ export const rsvpEvent = async (req, res, next) => {
 			return next(err);
 		}
 
-		saveRsvp({ eventId, guestId, going })
+		saveRsvp({ eventId, guestId, data })
 			.then(result => {
 				return respondSuccess(
 					res,
