@@ -133,7 +133,7 @@ export const getEventList = async (
 };
 
 export const getEventById = async id => {
-	return EventModel.db.getCollection('events').aggregate([
+	return EventModel.aggregate([
 		{ $match: { _id: convertStringIdToObjectId(id) } },
 
 		{

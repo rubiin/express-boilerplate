@@ -165,6 +165,18 @@ export const fetchEventById = async (req, res, next) => {
 	try {
 		const eventId = req.params.id;
 
+		const eventExists = await findEventByCondition({
+			_id: convertStringIdToObjectId(eventId),
+			host: convertStringIdToObjectId(req.user._id),
+		});
+
+		if (!eventExists) {
+			const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
+			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+			err.title = Lang.EVENT_TITLE;
+			return next(err);
+		}
+
 		getEventById(convertStringIdToObjectId(eventId))
 			.then(result => {
 				return respondSuccess(
