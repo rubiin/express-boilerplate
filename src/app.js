@@ -24,7 +24,7 @@ app.use(
 		extended: true,
 	}),
 );
-app.use(express.static(`${__dirname}/uploads`));
+app.use(express.static('uploads/images'));
 
 // v1 api routes
 app.use('/v1', routes);

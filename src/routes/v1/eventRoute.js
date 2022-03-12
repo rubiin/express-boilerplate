@@ -30,8 +30,9 @@ router.post(
 );
 
 router.put(
-	'/',
+	'/:id',
 	authenticateToken,
+	upload.single('coverImage'),
 	validateRequestBody(eventCreateSchema),
 	updateEvent,
 );

@@ -12,6 +12,7 @@ import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
 import {
 	convertStringIdToObjectId,
+	resizeImage,
 	sendOtpVerification,
 } from '../utils/generic';
 import { generateJWTToken } from '../utils/jwt';
@@ -163,6 +164,8 @@ export const updateUser = async (req, res, next) => {
 			profilePic: req.file.filename,
 			isRegistrationComplete: true,
 		};
+
+		await resizeImage(req, 500);
 
 		updateUserProfile(data, req.user._id)
 			.then(result => {

@@ -96,6 +96,13 @@ export const getEventList = async (
 			},
 		},
 		{
+			$addFields: {
+				coverImageUrl: {
+					$concat: [process.env.API_URL, '/uploads/', '$coverImage'],
+				},
+			},
+		},
+		{
 			$facet: {
 				pagination: [
 					{ $count: 'total' },

@@ -85,6 +85,7 @@ export const saveEvent = async (req, res, next) => {
 export const updateEvent = async (req, res, next) => {
 	try {
 		const data = req.body;
+		data.coverImage = req.file.filename;
 
 		const eventExists = await findEventByCondition({
 			_id: convertStringIdToObjectId(data._id),
