@@ -27,7 +27,7 @@ app.use(
 app.use(express.static('uploads/images'));
 
 // v1 api routes
-app.get('/', (req, res) => res.send('Home Page Route'));
+app.get('/', (req, res) => res.send('Welcome to the API'));
 app.use('/v1', routes);
 
 // catch 404 and forward to error handler

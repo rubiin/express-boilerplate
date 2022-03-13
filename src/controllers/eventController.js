@@ -85,10 +85,13 @@ export const saveEvent = async (req, res, next) => {
 export const updateEvent = async (req, res, next) => {
 	try {
 		const data = req.body;
-		data.coverImage = req.file.filename;
+
+		if (req.file) {
+			data.coverImage = req.file.filename;
+		}
 
 		const eventExists = await findEventByCondition({
-			_id: convertStringIdToObjectId(data._id),
+			_id: convertStringIdToObjectId(req.params.id),
 			host: convertStringIdToObjectId(req.user._id),
 		});
 
@@ -108,7 +111,8 @@ export const updateEvent = async (req, res, next) => {
 		};
 
 		await updateLocation(eventExists.location, locationData);
-		updateEventById(data)
+
+		updateEventById(req.params.id, data)
 			.then(async result => {
 				return respondSuccess(
 					res,
