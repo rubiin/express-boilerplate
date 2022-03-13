@@ -88,6 +88,10 @@ UserSchema.plugin(mongooseDelete, {
 	deletedAt: true,
 });
 
+UserSchema.virtual('profilePicUrl').get(function () {
+	return `${process.env.APP_URL}/${this.profilePic}`;
+});
+
 const UserModel = mongoose.model('User', UserSchema);
 
 export default UserModel;

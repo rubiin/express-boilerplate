@@ -98,7 +98,7 @@ export const getEventList = async (
 		{
 			$addFields: {
 				coverImageUrl: {
-					$concat: [process.env.API_URL, '/uploads/', '$coverImage'],
+					$concat: [process.env.API_URL, '/', '$coverImage'],
 				},
 			},
 		},
@@ -153,7 +153,7 @@ export const getEventById = async id => {
 		},
 
 		{
-			$unwind: '$invitations',
+			$unwind: { path: '$invitations', preserveNullAndEmptyArrays: true },
 		},
 
 		{
@@ -169,6 +169,70 @@ export const getEventById = async id => {
 			$unwind: {
 				path: '$invitations.guest',
 				preserveNullAndEmptyArrays: true,
+			},
+		},
+		{
+			$unset: ['invitations.guest.password'],
+		},
+		{ $group: { _id: '$_id', invitation: { $push: '$invitations' } } },
+
+		{
+			$lookup: {
+				from: 'events',
+				localField: '_id',
+				foreignField: '_id',
+				as: 'event',
+			},
+		},
+
+		{
+			$unwind: { path: '$event', preserveNullAndEmptyArrays: true },
+		},
+		{
+			$lookup: {
+				from: 'locations',
+				localField: 'event.location',
+				foreignField: '_id',
+				as: 'event.location',
+			},
+		},
+
+		{
+			$unwind: {
+				path: '$event.location',
+				preserveNullAndEmptyArrays: true,
+			},
+		},
+
+		{
+			$lookup: {
+				from: 'users',
+				localField: 'event.host',
+				foreignField: '_id',
+				as: 'event.host',
+			},
+		},
+
+		{
+			$unwind: { path: '$event.host', preserveNullAndEmptyArrays: true },
+		},
+
+		{
+			$addFields: {
+				'event.invitations': '$invitation',
+			},
+		},
+
+		{
+			$replaceRoot: {
+				newRoot: '$event',
+			},
+		},
+		{
+			$addFields: {
+				coverImageUrl: {
+					$concat: [process.env.API_URL, '/', '$coverImage'],
+				},
 			},
 		},
 	]);
