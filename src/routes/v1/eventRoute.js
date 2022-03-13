@@ -19,7 +19,7 @@ import upload from '../../utils/fileUpload';
 
 const router = express.Router();
 
-router.get('/', authenticateToken, fetchEventList);
+router.get('/', fetchEventList);
 router.get('/:id', authenticateToken, fetchEventById);
 router.post(
 	'/',
