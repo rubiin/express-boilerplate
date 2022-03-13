@@ -88,6 +88,7 @@ export const updateEvent = async (req, res, next) => {
 
 		if (req.file) {
 			data.coverImage = req.file.filename;
+			await resizeImage(req, 500);
 		}
 
 		const eventExists = await findEventByCondition({
