@@ -73,6 +73,7 @@
 	},
 	"scripts": {
 		"dev": "cross-env NODE_ENV=dev DEBUG=http nodemon --exec babel-node ./src/bin/www.js",
+		"start": "cross-env NODE_ENV=prod DEBUG=http nodemon --exec babel-node ./src/bin/www.js",
 		"clean": "rm -rf dist",
 		"build": "npm run clean && babel ./src --out-dir dist --copy-files",
 		"prod": "cross-env NODE_ENV=production DEBUG=http node ./dist/bin/www.js",

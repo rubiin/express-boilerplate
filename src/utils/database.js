@@ -3,9 +3,11 @@ import mongoose from 'mongoose';
 import path from 'path';
 import dotenv from 'dotenv';
 
-dotenv.config({
-	path: path.join(__dirname, `../../env/.env.${process.env.NODE_ENV}`),
-});
+if (process.env.NODE_ENV !== 'prod') {
+	dotenv.config({
+		path: path.join(__dirname, `../../env/.env.${process.env.NODE_ENV}`),
+	});
+}
 
 // Set up default mongoose connection
 const dbHost = process.env.DB_HOST;
