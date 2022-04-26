@@ -216,6 +216,17 @@ export const inviteGuests = async (req, res, next) => {
 			phoneNumber: { $in: req.body.phoneNumbers },
 		});
 
+		const eventExists = await findEventByCondition({
+			_id: convertStringIdToObjectId(eventId),
+		});
+
+		if (!eventExists) {
+			const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
+			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+			err.title = Lang.EVENT_TITLE;
+			return next(err);
+		}
+
 		saveInvites(eventId, users)
 			.then(result => {
 				return respondSuccess(

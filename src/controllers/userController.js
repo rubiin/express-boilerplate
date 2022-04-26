@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { omit } from '@rubiin/js-utils';
+import { omit } from 'helper-fns';
 import {
 	createUserProfile,
 	getUserByCondition,

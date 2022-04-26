@@ -1,4 +1,4 @@
-import { pick } from '@rubiin/js-utils';
+import { pick } from 'helper-fns';
 import HostModel from '../models/hostModel';
 
 // create Host
