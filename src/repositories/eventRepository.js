@@ -142,6 +142,17 @@ export const getEventList = async (
 export const getEventById = async id => {
 	return EventModel.aggregate([
 		{ $match: { _id: convertStringIdToObjectId(id) } },
+		{
+			$lookup: {
+				from: 'hosts',
+				localField: '_id',
+				foreignField: 'event',
+				as: 'host',
+			},
+		},
+		{
+			$unwind: { path: '$hosts', preserveNullAndEmptyArrays: true },
+		},
 
 		{
 			$lookup: {
