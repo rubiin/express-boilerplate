@@ -12,7 +12,10 @@ export const saveInvites = async (eventId, users) => {
 export const getInvites = async userId => {
 	return InvitationModel.find({
 		guest: convertStringIdToObjectId(userId),
-	}).populate('event');
+	}).populate({
+		path: 'event',
+		populate: { path: 'host' },
+	});
 };
 
 export const getInviteByCondition = async condition => {
