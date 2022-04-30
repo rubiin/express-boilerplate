@@ -9,6 +9,12 @@ export const saveInvites = async (eventId, users) => {
 	);
 };
 
+export const getInvites = async userId => {
+	return InvitationModel.find({
+		guest: convertStringIdToObjectId(userId),
+	}).populate('event');
+};
+
 export const getInviteByCondition = async condition => {
 	return InvitationModel.find(condition);
 };

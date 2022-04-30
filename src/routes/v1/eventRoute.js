@@ -19,8 +19,13 @@ import upload from '../../utils/fileUpload';
 
 const router = express.Router();
 
+// fetch all event
 router.get('/', fetchEventList);
+
+// fetch event by id
 router.get('/:id', authenticateToken, fetchEventById);
+
+// create event
 router.post(
 	'/',
 	authenticateToken,
@@ -29,6 +34,7 @@ router.post(
 	saveEvent,
 );
 
+// update event
 router.put(
 	'/:id',
 	authenticateToken,
@@ -37,6 +43,7 @@ router.put(
 	updateEvent,
 );
 
+// invite to an event
 router.post(
 	'/:id/invite',
 	authenticateToken,
@@ -44,8 +51,10 @@ router.post(
 	inviteGuests,
 );
 
+// delete event
 router.delete('/:id', authenticateToken, deleteEvent);
 
+// rsvp to an event
 router.put(
 	'/:id/rsvp',
 	authenticateToken,

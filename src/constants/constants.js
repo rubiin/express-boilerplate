@@ -63,6 +63,7 @@ const responseMessages = {
 		EVENT_DOES_NOT_EXIST: 'Event does not exists.',
 		RSVP_SUCCESS: 'Event rsvp success.',
 		INVITE_SUCCESS: 'Users invited successfully.',
+		INVITE_FETCH_SUCCESS: 'User invites fetched successfully.',
 		INVITE_NOT_FOUND:
 			'We are unable to find any invite for the user for the event',
 

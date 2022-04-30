@@ -21,6 +21,7 @@ import {
 } from '../repositories/locationRepository';
 import {
 	getInviteByCondition,
+	getInvites,
 	saveInvites,
 	saveRsvp,
 } from '../repositories/inviteRepository';
@@ -234,6 +235,35 @@ export const inviteGuests = async (req, res, next) => {
 					StatusCodes.OK,
 					Lang.EVENT_TITLE,
 					Lang.INVITE_SUCCESS,
+					result,
+				);
+			})
+			.catch(err => {
+				console.log(err);
+				return respondError(
+					res,
+					StatusCodes.UNPROCESSABLE_ENTITY,
+					Lang.FAILURE,
+					Lang.SOMETHING_WENT_WRONG,
+				);
+			});
+	} catch (error) {
+		console.log('error', error);
+		next(error);
+	}
+};
+
+export const getUserInvites = async (req, res, next) => {
+	try {
+		const { user } = req;
+
+		getInvites(user._id)
+			.then(result => {
+				return respondSuccess(
+					res,
+					StatusCodes.OK,
+					Lang.EVENT_TITLE,
+					Lang.INVITE_FETCH_SUCCESS,
 					result,
 				);
 			})
