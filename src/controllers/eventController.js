@@ -1,8 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { respondError, respondSuccess } from '../utils/responseHelper';
 import Lang from '../constants/constants';
-import { convertStringIdToObjectId, resizeImage } from '../utils/generic';
-import { createHost } from '../repositories/hostRepository';
 import {
 	createEvent,
 	deleteEventById,
@@ -11,20 +8,23 @@ import {
 	getEventList,
 	updateEventById,
 } from '../repositories/eventRepository';
-import {
-	getUserByCondition,
-	getUsersByCondition,
-} from '../repositories/userRepository';
-import {
-	createLocation,
-	updateLocation,
-} from '../repositories/locationRepository';
+import { createHost } from '../repositories/hostRepository';
 import {
 	getInviteByCondition,
 	getInvites,
 	saveInvites,
 	saveRsvp,
 } from '../repositories/inviteRepository';
+import {
+	createLocation,
+	updateLocation,
+} from '../repositories/locationRepository';
+import {
+	getUserByCondition,
+	getUsersByCondition,
+} from '../repositories/userRepository';
+import { convertStringIdToObjectId } from '../utils/generic';
+import { respondError, respondSuccess } from '../utils/responseHelper';
 
 export const saveEvent = async (req, res, next) => {
 	try {
@@ -34,8 +34,6 @@ export const saveEvent = async (req, res, next) => {
 			err.title = Lang.USER_TITLE;
 			return next(err);
 		}
-
-		await resizeImage(req, 500);
 
 		const data = req.body;
 
@@ -90,7 +88,6 @@ export const updateEvent = async (req, res, next) => {
 
 		if (req.file) {
 			data.coverImage = req.file.filename;
-			await resizeImage(req, 500);
 		}
 
 		const eventExists = await findEventByCondition({

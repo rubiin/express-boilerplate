@@ -6,6 +6,7 @@ export const createEvent = async data => {
 	const event = new EventModel();
 	event.title = data.title;
 	event.host = data.host;
+	event.user = data.user;
 	event.location = data.location;
 	event.eventLink = data.eventLink;
 	event.startDateTime = data.startDateTime;
