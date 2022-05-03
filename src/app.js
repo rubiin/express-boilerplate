@@ -20,11 +20,11 @@ app.use(helmet());
 app.use(compression());
 app.use(cors());
 app.use(
-	bodyParser.urlencoded({
-		extended: true,
-	}),
+    bodyParser.urlencoded({
+        extended: true,
+    }),
 );
-app.use(express.static('uploads/images'));
+app.use(express.static('uploads'));
 
 // v1 api routes
 app.get('/', (req, res) => res.send('Welcome to the API'));
@@ -32,30 +32,30 @@ app.use('/v1', routes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-	next(createError(404));
+    next(createError(404));
 });
 
 // all error handler
 app.use((err, req, res, _next) => {
-	if (err instanceof multer.MulterError) {
-		if (err.code === 'LIMIT_FILE_SIZE') {
-			res.status(413);
-			return res.json({
-				message: 'Filesize too large, must be < 5MB',
-			});
-		}
-	}
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            res.status(413);
+            return res.json({
+                message: 'Filesize too large, must be < 5MB',
+            });
+        }
+    }
 
-	let statusCode = 0;
-	if (err.status) statusCode = err.status;
-	else if (err.code) statusCode = err.code;
-	else statusCode = 500;
+    let statusCode = 0;
+    if (err.status) statusCode = err.status;
+    else if (err.code) statusCode = err.code;
+    else statusCode = 500;
 
-	res.status(statusCode >= 100 && statusCode < 600 ? statusCode : 500);
-	return res.json({
-		title: err.title ? err.title : 'Internal Server Error',
-		message: err.message,
-	});
+    res.status(statusCode >= 100 && statusCode < 600 ? statusCode : 500);
+    return res.json({
+        title: err.title ? err.title : 'Internal Server Error',
+        message: err.message,
+    });
 });
 
 export default app;
