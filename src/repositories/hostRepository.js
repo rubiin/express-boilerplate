@@ -8,6 +8,7 @@ export const createHost = async data => {
 	return host.save();
 };
 
+// get Host by condition
 export const getHostByCondition = async condition => {
 	return HostModel.findOne(condition).exec();
 };

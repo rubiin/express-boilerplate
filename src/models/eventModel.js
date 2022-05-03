@@ -5,6 +5,11 @@ const { Schema } = mongoose;
 
 const EventSchema = new Schema(
 	{
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
+			required: true,
+		},
 		host: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Host',

@@ -1,3 +1,4 @@
+import EventModel from '../models/eventModel';
 import UserModel from '../models/userModel';
 import { convertStringIdToObjectId } from '../utils/generic';
 
@@ -82,5 +83,9 @@ export const getUsersByCondition = async condition => {
 };
 
 export const getUserById = async id => {
-	return UserModel.findById(id).lean().exec();
+	const user = await UserModel.findById(id).lean().exec();
+	const events = await EventModel.find({
+		user: convertStringIdToObjectId(id),
+	}).exec();
+	return { user, events };
 };

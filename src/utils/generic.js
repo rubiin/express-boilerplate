@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import sharp from 'sharp';
-import path from 'path';
 import fs from 'fs';
+import mongoose from 'mongoose';
+import path from 'path';
+import sharp from 'sharp';
 import OtpModel from '../models/otpModel';
 
 export const convertStringIdToObjectId = id => {

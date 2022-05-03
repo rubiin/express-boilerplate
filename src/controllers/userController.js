@@ -1,5 +1,7 @@
-import { StatusCodes } from 'http-status-codes';
 import { omit } from 'helper-fns';
+import { StatusCodes } from 'http-status-codes';
+import Lang from '../constants/constants';
+import OtpModel from '../models/otpModel';
 import {
 	createUserProfile,
 	getUserByCondition,
@@ -8,15 +10,12 @@ import {
 	updateUserPassword,
 	updateUserProfile,
 } from '../repositories/userRepository';
-import { respondError, respondSuccess } from '../utils/responseHelper';
-import Lang from '../constants/constants';
 import {
 	convertStringIdToObjectId,
-	resizeImage,
 	sendOtpVerification,
 } from '../utils/generic';
 import { generateJWTToken } from '../utils/jwt';
-import OtpModel from '../models/otpModel';
+import { respondError, respondSuccess } from '../utils/responseHelper';
 
 export const userSignup = async (req, res, next) => {
 	try {
@@ -164,8 +163,6 @@ export const updateUser = async (req, res, next) => {
 			profilePic: req.file.filename,
 			isRegistrationComplete: true,
 		};
-
-		await resizeImage(req, 500);
 
 		updateUserProfile(data, req.user._id)
 			.then(result => {

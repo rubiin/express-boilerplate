@@ -58,6 +58,7 @@ export const saveEvent = async (req, res, next) => {
 		data.host = host._id;
 		data.location = location._id;
 		data.coverImage = req.file.filename;
+		data.user = req.user;
 		createEvent(data)
 			.then(async result => {
 				return respondSuccess(
