@@ -1,353 +1,353 @@
 import { StatusCodes } from 'http-status-codes';
 import Lang from '../constants/constants';
 import {
-	createEvent,
-	deleteEventById,
-	findEventByCondition,
-	getEventById,
-	getEventList,
-	updateEventById,
+    createEvent,
+    deleteEventById,
+    findEventByCondition,
+    getEventById,
+    getEventList,
+    updateEventById,
 } from '../repositories/eventRepository';
 import { createHost } from '../repositories/hostRepository';
 import {
-	getInviteByCondition,
-	getInvites,
-	saveInvites,
-	saveRsvp,
+    getInviteByCondition,
+    getInvites,
+    saveInvites,
+    saveRsvp,
 } from '../repositories/inviteRepository';
 import {
-	createLocation,
-	updateLocation,
+    createLocation,
+    updateLocation,
 } from '../repositories/locationRepository';
 import {
-	getUserByCondition,
-	getUsersByCondition,
+    getUserByCondition,
+    getUsersByCondition,
 } from '../repositories/userRepository';
 import { convertStringIdToObjectId } from '../utils/generic';
 import { respondError, respondSuccess } from '../utils/responseHelper';
 
-export const saveEvent = async (req, res, next) => {
-	try {
-		if (!req.file) {
-			const err = new Error(Lang.IMAGE_REQUIRED);
-			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
-			err.title = Lang.USER_TITLE;
-			return next(err);
-		}
+export const saveEvent = async(req, res, next) => {
+    try {
+        if (!req.file) {
+            const err = new Error(Lang.IMAGE_REQUIRED);
+            err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+            err.title = Lang.USER_TITLE;
+            return next(err);
+        }
 
-		const data = req.body;
+        const data = req.body;
 
-		const currentUser = await getUserByCondition({
-			_id: convertStringIdToObjectId(req.user._id),
-		});
+        const currentUser = await getUserByCondition({
+            _id: convertStringIdToObjectId(req.user._id),
+        });
 
-		const locationData = {
-			city: data.city,
-			state: data.state,
-			zipCode: data.zipCode,
-			latitude: data.latitude,
-			longitude: data.longitude,
-		};
+        const locationData = {
+            city: data.city,
+            state: data.state,
+            zipCode: data.zipCode,
+            latitude: data.latitude,
+            longitude: data.longitude,
+        };
 
-		const [host, location] = await Promise.all([
-			createHost(currentUser),
-			createLocation(locationData),
-		]);
-		data.host = host._id;
-		data.location = location._id;
-		data.coverImage = req.file.filename;
-		data.user = req.user;
-		createEvent(data)
-			.then(async result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.EVENT_CREATE_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        const [host, location] = await Promise.all([
+            createHost(currentUser),
+            createLocation(locationData),
+        ]);
+        data.host = host._id;
+        data.location = location._id;
+        data.coverImage = req.file.filename;
+        data.user = req.user;
+        createEvent(data)
+            .then(async result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.EVENT_CREATE_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const updateEvent = async (req, res, next) => {
-	try {
-		const data = req.body;
+export const updateEvent = async(req, res, next) => {
+    try {
+        const data = req.body;
 
-		if (req.file) {
-			data.coverImage = req.file.filename;
-		}
+        if (req.file) {
+            data.coverImage = req.file.filename;
+        }
 
-		const eventExists = await findEventByCondition({
-			_id: convertStringIdToObjectId(req.params.id),
-			host: convertStringIdToObjectId(req.user._id),
-		});
+        const eventExists = await findEventByCondition({
+            _id: convertStringIdToObjectId(req.params.id),
+            host: convertStringIdToObjectId(req.user._id),
+        });
 
-		if (!eventExists) {
-			const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
-			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
-			err.title = Lang.EVENT_TITLE;
-			return next(err);
-		}
+        if (!eventExists) {
+            const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
+            err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+            err.title = Lang.EVENT_TITLE;
+            return next(err);
+        }
 
-		const locationData = {
-			city: data.city,
-			state: data.state,
-			zipCode: data.zipCode,
-			latitude: data.latitude,
-			longitude: data.longitude,
-		};
+        const locationData = {
+            city: data.city,
+            state: data.state,
+            zipCode: data.zipCode,
+            latitude: data.latitude,
+            longitude: data.longitude,
+        };
 
-		await updateLocation(eventExists.location, locationData);
+        await updateLocation(eventExists.location, locationData);
 
-		updateEventById(req.params.id, data)
-			.then(async result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.EVENT_CREATE_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        updateEventById(req.params.id, data)
+            .then(async result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.EVENT_CREATE_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const fetchEventList = async (req, res, next) => {
-	try {
-		const options = req.query;
+export const fetchEventList = async(req, res, next) => {
+    try {
+        const options = req.query;
 
-		getEventList(options)
-			.then(result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.EVENT_FETCH_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        getEventList(options)
+            .then(result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.EVENT_FETCH_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const fetchEventById = async (req, res, next) => {
-	try {
-		const eventId = req.params.id;
+export const fetchEventById = async(req, res, next) => {
+    try {
+        const eventId = req.params.id;
 
-		const eventExists = await findEventByCondition({
-			_id: convertStringIdToObjectId(eventId),
-			host: convertStringIdToObjectId(req.user._id),
-		});
+        const eventExists = await findEventByCondition({
+            _id: convertStringIdToObjectId(eventId),
+            host: convertStringIdToObjectId(req.user._id),
+        });
 
-		if (!eventExists) {
-			const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
-			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
-			err.title = Lang.EVENT_TITLE;
-			return next(err);
-		}
+        if (!eventExists) {
+            const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
+            err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+            err.title = Lang.EVENT_TITLE;
+            return next(err);
+        }
 
-		getEventById(convertStringIdToObjectId(eventId))
-			.then(result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.EVENT_FETCH_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        getEventById(convertStringIdToObjectId(eventId))
+            .then(result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.EVENT_FETCH_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const inviteGuests = async (req, res, next) => {
-	try {
-		const eventId = req.params.id;
+export const inviteGuests = async(req, res, next) => {
+    try {
+        const eventId = req.params.id;
 
-		const users = await getUsersByCondition({
-			phoneNumber: { $in: req.body.phoneNumbers },
-		});
+        const users = await getUsersByCondition({
+            phoneNumber: { $in: req.body.phoneNumbers },
+        });
 
-		const eventExists = await findEventByCondition({
-			_id: convertStringIdToObjectId(eventId),
-		});
+        const eventExists = await findEventByCondition({
+            _id: convertStringIdToObjectId(eventId),
+        });
 
-		if (!eventExists) {
-			const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
-			err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
-			err.title = Lang.EVENT_TITLE;
-			return next(err);
-		}
+        if (!eventExists) {
+            const err = new Error(Lang.EVENT_DOES_NOT_EXIST);
+            err.status = err.code = StatusCodes.UNPROCESSABLE_ENTITY;
+            err.title = Lang.EVENT_TITLE;
+            return next(err);
+        }
 
-		saveInvites(eventId, users)
-			.then(result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.INVITE_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        saveInvites(eventId, users)
+            .then(result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.INVITE_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const getUserInvites = async (req, res, next) => {
-	try {
-		const { user } = req;
+export const getUserInvites = async(req, res, next) => {
+    try {
+        const { user } = req;
 
-		getInvites(user._id)
-			.then(result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.INVITE_FETCH_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        getInvites(user._id)
+            .then(result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.INVITE_FETCH_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const deleteEvent = async (req, res, next) => {
-	try {
-		const eventId = req.params.id;
+export const deleteEvent = async(req, res, next) => {
+    try {
+        const eventId = req.params.id;
 
-		deleteEventById(eventId)
-			.then(result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.EVENT_DELETE_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        deleteEventById(eventId)
+            .then(result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.EVENT_DELETE_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
 
-export const rsvpEvent = async (req, res, next) => {
-	try {
-		const eventId = req.params.id;
-		const data = req.body;
-		const guestId = req.user._id;
+export const rsvpEvent = async(req, res, next) => {
+    try {
+        const eventId = req.params.id;
+        const data = req.body;
+        const guestId = req.user._id;
 
-		const findInvite = await getInviteByCondition({
-			event: convertStringIdToObjectId(eventId),
-			guest: convertStringIdToObjectId(guestId),
-		});
+        const findInvite = await getInviteByCondition({
+            event: convertStringIdToObjectId(eventId),
+            guest: convertStringIdToObjectId(guestId),
+        });
 
-		if (!findInvite) {
-			const err = new Error(Lang.INVITE_NOT_FOUND);
-			err.status = err.code = StatusCodes.NOT_FOUND;
-			err.title = Lang.EVENT_TITLE;
-			return next(err);
-		}
+        if (!findInvite) {
+            const err = new Error(Lang.INVITE_NOT_FOUND);
+            err.status = err.code = StatusCodes.NOT_FOUND;
+            err.title = Lang.EVENT_TITLE;
+            return next(err);
+        }
 
-		saveRsvp({ eventId, guestId, data })
-			.then(result => {
-				return respondSuccess(
-					res,
-					StatusCodes.OK,
-					Lang.EVENT_TITLE,
-					Lang.RSVP_SUCCESS,
-					result,
-				);
-			})
-			.catch(err => {
-				console.log(err);
-				return respondError(
-					res,
-					StatusCodes.UNPROCESSABLE_ENTITY,
-					Lang.FAILURE,
-					Lang.SOMETHING_WENT_WRONG,
-				);
-			});
-	} catch (error) {
-		console.log('error', error);
-		next(error);
-	}
+        saveRsvp({ eventId, guestId, data })
+            .then(result => {
+                return respondSuccess(
+                    res,
+                    StatusCodes.OK,
+                    Lang.EVENT_TITLE,
+                    Lang.RSVP_SUCCESS,
+                    result,
+                );
+            })
+            .catch(err => {
+                console.log(err);
+                return respondError(
+                    res,
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    Lang.FAILURE,
+                    Lang.SOMETHING_WENT_WRONG,
+                );
+            });
+    } catch (error) {
+        console.log('error', error);
+        next(error);
+    }
 };
